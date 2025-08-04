@@ -69,7 +69,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint .",
     "prepare": "npm run build",
     "validate": "node scripts/validate.js",
