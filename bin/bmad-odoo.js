@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name('bmad-odoo')
   .description('BMAD-METHOD-ODOO expansion pack CLI')
-  .version('1.2.0');
+  .version('1.3.0');
 
 // Calculate MD5 hash of file content
 function calculateFileHash(filePath) {
