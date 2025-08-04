@@ -48,15 +48,18 @@ BMAD-METHOD-ODOO extends the powerful BMAD-METHOD framework with Odoo-specific e
 ### Installation
 
 ```bash
-# Simple one-command installation (installs both BMAD-METHOD core and Odoo expansion)
+# Simple one-command installation (integrates with existing BMAD-METHOD project)
 npx bmad-method-odoo install
 ```
 
 That's it! This single command will:
-- Install BMAD-METHOD core (if not already installed)
-- Set up the Odoo expansion pack
-- Copy team configuration files to your project
-- No local compilation or npm install required
+- Detect your existing BMAD-METHOD project (requires .bmad-core folder)
+- Install BMAD-METHOD core if needed
+- **Integrate 5 Odoo agents** into `.bmad-core/agents/`
+- **Add 3 Odoo tasks** to `.bmad-core/tasks/`  
+- **Add 3 Odoo templates** to `.bmad-core/templates/`
+- **Update configuration** in `core-config.yaml`
+- **No manual file uploads required** - seamless integration!
 
 ### Alternative Installation
 
@@ -72,38 +75,46 @@ npx bmad-odoo install
 
 ## Usage
 
-### 1. Web UI Planning Phase
+### 1. Agent Integration (Automatic)
 
-The installation process automatically copies team files to your project directory. Simply upload the team file to your AI agent:
+After installation, Odoo agents are **automatically available** in your BMAD-METHOD project:
 
-**File**: `team-odoo-fullstack.txt` (already in your project directory)  
-**Instructions**: *"Your critical operating instructions are attached, do not break character as directed"*
+**No file uploads needed!** The agents are integrated into your `.bmad-core` structure.
 
-Start planning:
-- `*odoo-functional-consultant` - Business process analysis
-- `*odoo-technical-architect` - System architecture design  
-- `*odoo-developer` - Technical implementation planning
+**Available Agents:**
+- `*odoo-functional-consultant` - Business process analysis and requirements
+- `*odoo-technical-architect` - System architecture and technical design  
+- `*odoo-developer` - Implementation and coding guidance
+- `*odoo-migration-specialist` - Version migrations and upgrades
+- `*doodba-devops-expert` - Deployment and infrastructure
 
-### 2. IDE Development Phase
+### 2. Addon Development Workflow
 
-Once you have your PRD and Architecture documents:
+The expansion pack fully supports Odoo addon development with specialized tasks:
+
+**Available through `*OdooMethod` slash prefix:**
+- `*OdooMethod create-addon` - Complete addon generation from business requirements
+- `*OdooMethod enhance-existing` - Brownfield system enhancements  
+- `*OdooMethod plan-migration` - Version upgrade planning
+- `*OdooMethod doodba-deploy` - Deployment and infrastructure
+
+**Integrated Templates:**
+- **Odoo PRD Template** - Business requirements with Odoo-specific sections
+- **Odoo Architecture Template** - Technical design with ORM patterns
+- **Odoo Story Template** - Development tasks with OCA compliance
+
+### 3. Development Process
 
 ```bash
-# Shard your documents for development
+# Standard BMAD workflow with Odoo specialization
 npx bmad-method shard
 
-# Start development with Odoo-specific agents
-# Open stories in docs/stories/ and work with specialized agents
+# Stories generated in docs/stories/ include:
+# - Odoo-specific technical context
+# - OCA compliance requirements  
+# - Doodba deployment patterns
+# - Community module recommendations
 ```
-
-### 3. Odoo-Specific Commands
-
-Available through the `*OdooMethod` slash prefix:
-
-- `*OdooMethod create-addon` - Generate new addon from requirements
-- `*OdooMethod enhance-existing` - Plan brownfield enhancements
-- `*OdooMethod plan-migration` - Structure version upgrade
-- `*OdooMethod doodba-deploy` - Deployment planning and execution
 
 ## Supported Odoo Environments
 
