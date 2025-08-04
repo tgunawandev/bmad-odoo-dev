@@ -3,10 +3,26 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main, develop ]
+    paths:
+      - 'package.json'
+      - 'agents/**'
+      - 'tasks/**'
+      - 'templates/**'
+      - 'checklists/**'
+      - 'data/**'
+      - 'teams/**'
+      - 'bin/**'
+      - 'scripts/**'
+      - 'config.yaml'
+      - '.github/workflows/**'
   pull_request:
     branches: [ main ]
-  release:
-    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (leave empty to use package.json version)'
+        required: false
+        type: string
 
 jobs:
   test:
@@ -62,24 +78,105 @@ jobs:
   publish:
     needs: [test, validate-bmad-compatibility]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
+    if: github.ref == 'refs/heads/main'
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
         registry-url: 'https://registry.npmjs.org'
-    
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
     - name: Install dependencies
       run: npm ci
-    
+
+    - name: Get package version
+      id: package
+      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+    - name: Check if version exists on npm
+      id: npm_check
+      run: |
+        VERSION=${{ steps.package.outputs.version }}
+        if npm view bmad-odoo-dev@$VERSION version 2>/dev/null; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+          echo "Version $VERSION already exists on npm"
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "Version $VERSION does not exist on npm"
+        fi
+
     - name: Build package
+      if: steps.npm_check.outputs.exists == 'false'
       run: npm run build
-    
-    - name: Publish to NPM
-      run: npm publish
+
+    - name: Publish to npm
+      if: steps.npm_check.outputs.exists == 'false'
+      run: npm publish --tag latest
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Verify @latest tag
+      if: steps.npm_check.outputs.exists == 'false'
+      run: |
+        VERSION=${{ steps.package.outputs.version }}
+        echo "Verifying @latest tag points to version $VERSION"
+        LATEST_VERSION=$(npm view bmad-odoo-dev@latest version)
+        if [ "$LATEST_VERSION" = "$VERSION" ]; then
+          echo "✅ @latest tag correctly points to $VERSION"
+        else
+          echo "⚠️  @latest tag issue: expected $VERSION, got $LATEST_VERSION"
+          echo "Manually setting @latest tag..."
+          npm dist-tag add bmad-odoo-dev@$VERSION latest
+        fi
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create GitHub Release
+      if: steps.npm_check.outputs.exists == 'false'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.package.outputs.version }}
+        release_name: Release v${{ steps.package.outputs.version }}
+        body: |
+          ## BMAD-ODOO-DEV v${{ steps.package.outputs.version }}
+          
+          ### 🚀 Installation
+          ```bash
+          npm install bmad-odoo-dev
+          npx bmad-odoo install
+          ```
+          
+          ### 🤖 Agents Available
+          - `*odoo-analyst` - Business analysis, requirements, epic creation, and story management (Scrum Master)
+          - `*odoo-architect` - System architecture, technical design, deployment strategy, and migration planning
+          - `*odoo-developer` - Code implementation, module development, deployment execution, and troubleshooting
+          
+          ### ⚡ Slash Commands
+          - `*BMadOdooDev create-addon` - Generate new Odoo addon
+          - `*BMadOdooDev enhance-existing` - Plan system enhancements
+          - `*BMadOdooDev plan-migration` - Structure version upgrades
+          
+          See [CHANGELOG.md](./CHANGELOG.md) for detailed changes.
+        draft: false
+        prerelease: false
+
+    - name: Version already published
+      if: steps.npm_check.outputs.exists == 'true'
+      run: |
+        echo "::notice::Version ${{ steps.package.outputs.version }} already exists on npm, skipping publish"
