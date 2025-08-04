@@ -28,21 +28,15 @@ integration:
   
 # Available agents
 agents:
-  - name: odoo-functional-consultant
-    file: agents/odoo-functional-consultant.md
-    role: Business process analysis and requirements gathering
-  - name: odoo-technical-architect
-    file: agents/odoo-technical-architect.md
-    role: System architecture and technical design
+  - name: odoo-analyst
+    file: agents/odoo-analyst.md
+    role: Business process analysis, requirements gathering, and functional specifications
+  - name: odoo-architect
+    file: agents/odoo-architect.md
+    role: System architecture, technical design, deployment strategy, and migration planning
   - name: odoo-developer
     file: agents/odoo-developer.md
-    role: Implementation and coding guidance
-  - name: odoo-migration-specialist
-    file: agents/odoo-migration-specialist.md
-    role: Version migrations and upgrades
-  - name: doodba-devops-expert
-    file: agents/doodba-devops-expert.md
-    role: Deployment and infrastructure management
+    role: Code implementation, module development, deployment execution, and troubleshooting
 
 # Available tasks
 tasks:

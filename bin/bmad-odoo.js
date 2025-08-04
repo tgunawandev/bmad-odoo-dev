@@ -200,11 +200,9 @@ slashPrefix: BMadOdooDev`;
       console.log(chalk.green('\n✅ BMAD-ODOO-DEV expansion pack installed successfully!'));
       console.log(chalk.blue(`\n📁 Installed to: ${expansionDir}/`));
       console.log(chalk.blue('\n🎯 Odoo agents now available:'));
-      console.log('   • *odoo-functional-consultant');
-      console.log('   • *odoo-technical-architect');
+      console.log('   • *odoo-analyst');
+      console.log('   • *odoo-architect');
       console.log('   • *odoo-developer');
-      console.log('   • *odoo-migration-specialist');
-      console.log('   • *doodba-devops-expert');
       console.log(chalk.blue('\n⚡ Slash commands available:'));
       console.log('   • *BMadOdooDev create-addon');
       console.log('   • *BMadOdooDev enhance-existing');
@@ -280,11 +278,9 @@ program
     console.log(chalk.blue('🤖 Available Odoo specialist agents:'));
     
     const agents = [
-      { name: '*odoo-functional-consultant', desc: 'Business process analysis and requirements' },
-      { name: '*odoo-technical-architect', desc: 'System architecture and technical design' },
-      { name: '*odoo-developer', desc: 'Implementation and coding guidance' },
-      { name: '*odoo-migration-specialist', desc: 'Version migrations and upgrades' },
-      { name: '*doodba-devops-expert', desc: 'Deployment and infrastructure' }
+      { name: '*odoo-analyst', desc: 'Business process analysis, requirements gathering, and functional specifications' },
+      { name: '*odoo-architect', desc: 'System architecture, technical design, deployment strategy, and migration planning' },
+      { name: '*odoo-developer', desc: 'Code implementation, module development, deployment execution, and troubleshooting' }
     ];
     
     agents.forEach(agent => {
