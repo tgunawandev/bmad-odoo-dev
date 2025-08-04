@@ -1,6 +1,6 @@
 {
-  "name": "bmad-method-odoo",
-  "version": "1.1.2",
+  "name": "bmad-odoo-dev",
+  "version": "1.2.0",
   "description": "BMAD-METHOD expansion pack for comprehensive Odoo ERP development workflows",
   "main": "index.js",
   "bin": {
@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tgunawandev/BMAD-METHOD-ODOO.git"
+    "url": "git@github.com:tgunawandev/bmad-odoo-dev.git"
   },
   "bugs": {
-    "url": "https://github.com/tgunawandev/BMAD-METHOD-ODOO/issues"
+    "url": "https://github.com/tgunawandev/bmad-odoo-dev/issues"
   },
-  "homepage": "https://github.com/tgunawandev/BMAD-METHOD-ODOO#readme",
+  "homepage": "https://github.com/tgunawandev/bmad-odoo-dev#readme",
   "peerDependencies": {
     "bmad-method": ">=4.30.0"
   },
@@ -77,7 +77,7 @@
   "bmadMethod": {
     "expansionPack": true,
     "category": "domain-specific",
-    "slashPrefix": "OdooMethod",
+    "slashPrefix": "BMadOdooDev",
     "framework": "doodba",
     "community": "oca",
     "inheritsFrom": "bmad-method",

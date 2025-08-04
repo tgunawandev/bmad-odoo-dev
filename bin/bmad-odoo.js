@@ -4,7 +4,7 @@ const { Command } = require('commander');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
-const semver = require('semver');
+const crypto = require('crypto');
 const yaml = require('yaml');
 
 const program = new Command();
@@ -12,168 +12,204 @@ const program = new Command();
 program
   .name('bmad-odoo')
   .description('BMAD-METHOD-ODOO expansion pack CLI')
-  .version('1.0.0');
+  .version('1.2.0');
+
+// Calculate MD5 hash of file content
+function calculateFileHash(filePath) {
+  const content = fs.readFileSync(filePath);
+  return crypto.createHash('md5').update(content).digest('hex').substring(0, 16);
+}
 
 program
   .command('install')
-  .description('Install BMAD-METHOD-ODOO expansion pack')
+  .description('Install BMAD-METHOD-ODOO expansion pack into current project')
   .action(async () => {
     console.log(chalk.blue('🚀 Installing BMAD-METHOD-ODOO expansion pack...'));
     
     try {
-      // First install BMAD-METHOD core if not present
-      console.log(chalk.blue('📦 Checking BMAD-METHOD core installation...'));
+      // Check if we're in a directory (don't require .bmad-core)
+      const currentDir = process.cwd();
+      console.log(chalk.blue(`📁 Installing in: ${currentDir}`));
       
-      try {
-        // Try to run bmad-method to check if it's installed
-        const { execSync } = require('child_process');
-        execSync('npx bmad-method --version', { stdio: 'pipe' });
-        console.log(chalk.green('✅ BMAD-METHOD core found'));
-      } catch (error) {
-        console.log(chalk.yellow('📥 Installing BMAD-METHOD core...'));
-        const { execSync } = require('child_process');
-        execSync('npx bmad-method install', { stdio: 'inherit' });
-        console.log(chalk.green('✅ BMAD-METHOD core installed'));
+      // Check if .bmad-core exists (recommended but not required)
+      const bmadCoreExists = await fs.pathExists(path.join(currentDir, '.bmad-core'));
+      if (!bmadCoreExists) {
+        console.log(chalk.yellow('⚠️  No .bmad-core directory found. Consider initializing BMAD-METHOD first:'));
+        console.log(chalk.yellow('   npx bmad-method install'));
+        console.log(chalk.blue('   Continuing with expansion pack installation...'));
       }
 
-      // Integrate with existing .bmad-core structure
-      const bmadCorePath = path.join(process.cwd(), '.bmad-core');
-      if (!await fs.pathExists(bmadCorePath)) {
-        console.error(chalk.red('❌ .bmad-core folder not found. Please run this from a BMAD-METHOD project.'));
-        console.log(chalk.yellow('   Initialize BMAD-METHOD first: npx bmad-method install'));
-        process.exit(1);
+      // Create .bmad-odoo-dev directory
+      const expansionDir = '.bmad-odoo-dev';
+      const expansionPath = path.join(currentDir, expansionDir);
+      
+      if (await fs.pathExists(expansionPath)) {
+        console.log(chalk.yellow('⚠️  Expansion pack already exists. Reinstalling...'));
+        await fs.remove(expansionPath);
       }
 
-      console.log(chalk.blue('🔧 Integrating Odoo agents with BMAD-METHOD core...'));
+      await fs.ensureDir(expansionPath);
+      console.log(chalk.green(`✅ Created: ${expansionDir}/`));
 
-      // Copy agents to .bmad-core/agents/
+      // Create subdirectories
+      const subdirs = ['agents', 'tasks', 'templates', 'checklists', 'data'];
+      for (const subdir of subdirs) {
+        await fs.ensureDir(path.join(expansionPath, subdir));
+      }
+
+      // Track files for install manifest
+      const installedFiles = [];
+
+      // Copy config.yaml
+      const configContent = `name: bmad-odoo-dev
+version: 1.2.0
+short-title: Odoo ERP Development Pack
+description: >-
+  This expansion pack extends BMad Method with comprehensive Odoo ERP development
+  capabilities. It's designed for teams that need to define, implement, and manage
+  Odoo modules, customizations, and integrations using Doodba deployment patterns
+  and OCA community standards.
+author: BMad Community
+slashPrefix: BMadOdooDev`;
+      
+      const configPath = path.join(expansionPath, 'config.yaml');
+      await fs.writeFile(configPath, configContent);
+      console.log(chalk.green(`   ✅ Config: config.yaml`));
+      
+      installedFiles.push({
+        path: `${expansionDir}/config.yaml`,
+        hash: calculateFileHash(configPath),
+        modified: false
+      });
+
+      // Copy agents
       const agentsSrcDir = path.join(__dirname, '..', 'agents');
-      const agentsDestDir = path.join(bmadCorePath, 'agents');
-      await fs.ensureDir(agentsDestDir);
-      
-      const agentFiles = await fs.readdir(agentsSrcDir);
-      for (const file of agentFiles) {
-        if (file.endsWith('.md')) {
-          const srcPath = path.join(agentsSrcDir, file);
-          const destPath = path.join(agentsDestDir, file);
-          await fs.copy(srcPath, destPath);
-          console.log(chalk.green(`   ✅ Agent: ${file} → .bmad-core/agents/`));
-        }
-      }
-
-      // Copy tasks to .bmad-core/tasks/
-      const tasksSrcDir = path.join(__dirname, '..', 'tasks');
-      const tasksDestDir = path.join(bmadCorePath, 'tasks');
-      await fs.ensureDir(tasksDestDir);
-      
-      const taskFiles = await fs.readdir(tasksSrcDir);
-      for (const file of taskFiles) {
-        if (file.endsWith('.md')) {
-          const srcPath = path.join(tasksSrcDir, file);
-          const destPath = path.join(tasksDestDir, file);
-          await fs.copy(srcPath, destPath);
-          console.log(chalk.green(`   ✅ Task: ${file} → .bmad-core/tasks/`));
-        }
-      }
-
-      // Copy templates to .bmad-core/templates/
-      const templatesSrcDir = path.join(__dirname, '..', 'templates');
-      const templatesDestDir = path.join(bmadCorePath, 'templates');
-      await fs.ensureDir(templatesDestDir);
-      
-      const templateFiles = await fs.readdir(templatesSrcDir);
-      for (const file of templateFiles) {
-        if (file.endsWith('.yaml') || file.endsWith('.yml')) {
-          const srcPath = path.join(templatesSrcDir, file);
-          const destPath = path.join(templatesDestDir, file);
-          await fs.copy(srcPath, destPath);
-          console.log(chalk.green(`   ✅ Template: ${file} → .bmad-core/templates/`));
-        }
-      }
-
-      // Update install-manifest.yaml to register expansion pack and files
-      const manifestPath = path.join(bmadCorePath, 'install-manifest.yaml');
-      if (await fs.pathExists(manifestPath)) {
-        console.log(chalk.blue('⚙️  Registering expansion pack in install manifest...'));
-        
-        const manifestContent = await fs.readFile(manifestPath, 'utf8');
-        const manifest = yaml.parse(manifestContent);
-        
-        // Add expansion pack
-        if (!manifest.expansion_packs) {
-          manifest.expansion_packs = [];
-        }
-        
-        const odooPackExists = manifest.expansion_packs.some(pack => pack.name === 'bmad-method-odoo');
-        if (!odooPackExists) {
-          manifest.expansion_packs.push({
-            name: 'bmad-method-odoo',
-            version: '1.1.0',
-            installed_at: new Date().toISOString()
-          });
-        }
-        
-        // Add agent files to manifest
-        const odooAgentFiles = [
-          'odoo-functional-consultant.md',
-          'odoo-technical-architect.md', 
-          'odoo-developer.md',
-          'odoo-migration-specialist.md',
-          'doodba-devops-expert.md'
-        ];
-        
-        for (const agentFile of odooAgentFiles) {
-          const agentPath = `.bmad-core/agents/${agentFile}`;
-          const existsInManifest = manifest.files.some(file => file.path === agentPath);
-          
-          if (!existsInManifest) {
-            manifest.files.push({
-              path: agentPath,
-              hash: 'expansion-pack-file',
+      if (await fs.pathExists(agentsSrcDir)) {
+        const agentFiles = await fs.readdir(agentsSrcDir);
+        for (const file of agentFiles) {
+          if (file.endsWith('.md')) {
+            const srcPath = path.join(agentsSrcDir, file);
+            const destPath = path.join(expansionPath, 'agents', file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ Agent: ${file}`));
+            
+            installedFiles.push({
+              path: `${expansionDir}/agents/${file}`,
+              hash: calculateFileHash(destPath),
               modified: false
             });
           }
         }
-        
-        // Write updated manifest
-        await fs.writeFile(manifestPath, yaml.stringify(manifest));
-        console.log(chalk.green('   ✅ Updated install-manifest.yaml with expansion pack registration'));
       }
 
-      // Update core-config.yaml to add Odoo expansion pack
-      const configPath = path.join(bmadCorePath, 'core-config.yaml');
-      if (await fs.pathExists(configPath)) {
-        console.log(chalk.blue('⚙️  Updating BMAD configuration...'));
-        
-        let configContent = await fs.readFile(configPath, 'utf8');
-        
-        // Add Odoo expansion pack configuration
-        if (!configContent.includes('expansionPacks:')) {
-          configContent += '\n# Expansion Packs\nexpansionPacks:\n';
-        }
-        
-        if (!configContent.includes('bmad-method-odoo')) {
-          configContent += `  bmad-method-odoo:
-    enabled: true
-    version: "1.1.0"
-    slashPrefix: "OdooMethod"
-    agents: ["odoo-functional-consultant", "odoo-technical-architect", "odoo-developer", "odoo-migration-specialist", "doodba-devops-expert"]
-    domain: "odoo-development"
-`;
-          await fs.writeFile(configPath, configContent);
-          console.log(chalk.green('   ✅ Updated core-config.yaml with Odoo expansion pack'));
+      // Copy tasks
+      const tasksSrcDir = path.join(__dirname, '..', 'tasks');
+      if (await fs.pathExists(tasksSrcDir)) {
+        const taskFiles = await fs.readdir(tasksSrcDir);
+        for (const file of taskFiles) {
+          if (file.endsWith('.md')) {
+            const srcPath = path.join(tasksSrcDir, file);
+            const destPath = path.join(expansionPath, 'tasks', file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ Task: ${file}`));
+            
+            installedFiles.push({
+              path: `${expansionDir}/tasks/${file}`,
+              hash: calculateFileHash(destPath),
+              modified: false
+            });
+          }
         }
       }
 
-      console.log(chalk.green('\n✅ BMAD-METHOD-ODOO expansion pack installed successfully!'));
-      console.log(chalk.blue('\n🎯 Odoo agents now available in your BMAD-METHOD project:'));
-      console.log('   • Agent switching: *odoo-functional-consultant, *odoo-technical-architect, *odoo-developer');
-      console.log('   • Slash commands: *OdooMethod create-addon, *OdooMethod enhance-existing, *OdooMethod plan-migration');
-      console.log(chalk.blue('\n📁 Files integrated into .bmad-core structure:'));
-      console.log('   • 5 Odoo agents → .bmad-core/agents/');
-      console.log('   • 3 Odoo tasks → .bmad-core/tasks/');  
-      console.log('   • 3 Odoo templates → .bmad-core/templates/');
-      console.log('   • Configuration updated in core-config.yaml');
+      // Copy templates
+      const templatesSrcDir = path.join(__dirname, '..', 'templates');
+      if (await fs.pathExists(templatesSrcDir)) {
+        const templateFiles = await fs.readdir(templatesSrcDir);
+        for (const file of templateFiles) {
+          if (file.endsWith('.yaml') || file.endsWith('.yml')) {
+            const srcPath = path.join(templatesSrcDir, file);
+            const destPath = path.join(expansionPath, 'templates', file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ Template: ${file}`));
+            
+            installedFiles.push({
+              path: `${expansionDir}/templates/${file}`,
+              hash: calculateFileHash(destPath),
+              modified: false
+            });
+          }
+        }
+      }
+
+      // Copy checklists
+      const checklistsSrcDir = path.join(__dirname, '..', 'checklists');
+      if (await fs.pathExists(checklistsSrcDir)) {
+        const checklistFiles = await fs.readdir(checklistsSrcDir);
+        for (const file of checklistFiles) {
+          if (file.endsWith('.md')) {
+            const srcPath = path.join(checklistsSrcDir, file);
+            const destPath = path.join(expansionPath, 'checklists', file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ Checklist: ${file}`));
+            
+            installedFiles.push({
+              path: `${expansionDir}/checklists/${file}`,
+              hash: calculateFileHash(destPath),
+              modified: false
+            });
+          }
+        }
+      }
+
+      // Copy data
+      const dataSrcDir = path.join(__dirname, '..', 'data');
+      if (await fs.pathExists(dataSrcDir)) {
+        const dataFiles = await fs.readdir(dataSrcDir);
+        for (const file of dataFiles) {
+          if (file.endsWith('.md')) {
+            const srcPath = path.join(dataSrcDir, file);
+            const destPath = path.join(expansionPath, 'data', file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ Data: ${file}`));
+            
+            installedFiles.push({
+              path: `${expansionDir}/data/${file}`,
+              hash: calculateFileHash(destPath),
+              modified: false
+            });
+          }
+        }
+      }
+
+      // Generate install-manifest.yaml
+      const installManifest = {
+        version: '1.2.0',
+        installed_at: new Date().toISOString(),
+        install_type: 'expansion-pack',
+        expansion_pack_id: 'bmad-odoo-dev',
+        expansion_pack_name: 'bmad-odoo-dev',
+        ides_setup: ['claude-code'],
+        files: installedFiles
+      };
+
+      const manifestPath = path.join(expansionPath, 'install-manifest.yaml');
+      await fs.writeFile(manifestPath, yaml.stringify(installManifest));
+      console.log(chalk.green(`   ✅ Manifest: install-manifest.yaml`));
+
+      console.log(chalk.green('\n✅ BMAD-ODOO-DEV expansion pack installed successfully!'));
+      console.log(chalk.blue(`\n📁 Installed to: ${expansionDir}/`));
+      console.log(chalk.blue('\n🎯 Odoo agents now available:'));
+      console.log('   • /BMadOdooDev:agents:odoo-functional-consultant');
+      console.log('   • /BMadOdooDev:agents:odoo-technical-architect');
+      console.log('   • /BMadOdooDev:agents:odoo-developer');
+      console.log('   • /BMadOdooDev:agents:odoo-migration-specialist');
+      console.log('   • /BMadOdooDev:agents:doodba-devops-expert');
+      console.log(chalk.blue('\n⚡ Slash commands available:'));
+      console.log('   • /BMadOdooDev create-addon');
+      console.log('   • /BMadOdooDev enhance-existing');
+      console.log('   • /BMadOdooDev plan-migration');
+      console.log(chalk.yellow('\n🔄 Please restart Claude Code to discover new agents'));
       
     } catch (error) {
       console.error(chalk.red('❌ Installation failed:'), error.message);
