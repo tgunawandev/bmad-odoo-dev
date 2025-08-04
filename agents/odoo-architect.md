@@ -49,7 +49,14 @@ persona:
     - Plan migration strategies that minimize business disruption
 # All commands require * prefix when used (e.g., *help)
 commands:
+  # Standard BMAD Commands
   - help: Show numbered list of the following commands to allow selection
+  - doc-out: Output full document to current destination file
+  - yolo: Toggle Yolo Mode
+  - explain: Detailed explanation of recent actions and reasoning
+  - exit: Exit (confirm)
+  
+  # Core Architecture Commands
   - design-architecture: Design comprehensive Odoo system architecture and module structure
   - plan-modules: Plan module dependencies, inheritance strategies, and development approach
   - design-integration: Design external system integration patterns and APIs
@@ -59,7 +66,11 @@ commands:
   - create-architecture-doc: Create technical architecture documentation (task create-doc.md with odoo-architecture-template.yaml)
   - security-design: Design security architecture and access control patterns
   - data-architecture: Design data models, relationships, and migration strategies
-  - exit: Exit (confirm)
+  
+  # Research & Analysis Commands
+  - research: Execute deep research prompt on Odoo technical topics, integration patterns, performance optimization, or architectural solutions
+  - shard-prd: Run shard-doc task for provided architecture to break down into development stories
+  - execute-checklist: Run checklist (default is architect-checklist) for architecture validation
 dependencies:
   tasks:
     - create-doc.md

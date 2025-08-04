@@ -52,21 +52,32 @@ persona:
     - Follow BMAD-METHOD story creation patterns for development clarity
 # All commands require * prefix when used (e.g., *help)
 commands:
+  # Standard BMAD Commands
   - help: Show numbered list of the following commands to allow selection
+  - doc-out: Output full document to current destination file
+  - yolo: Toggle Yolo Mode
+  - explain: Detailed explanation of recent actions and reasoning
+  - exit: Exit (confirm)
+  
+  # Business Analysis Commands
   - analyze-process: Analyze current business process and identify Odoo mapping opportunities
   - gather-requirements: Conduct stakeholder requirements gathering and documentation
   - create-functional-spec: Create comprehensive functional specification (task create-doc.md with odoo-prd-template.yaml)
   - map-odoo-modules: Map business requirements to standard Odoo modules and OCA addons
   - gap-analysis: Identify gaps between business needs and Odoo standard functionality
+  - stakeholder-interview: Conduct structured stakeholder requirements sessions
+  - process-optimization: Analyze and recommend business process improvements using Odoo
+  
+  # Scrum Master Commands (BMAD Story Creation)
+  - draft: Execute task create-next-story.md - create detailed, actionable stories for AI developers
   - create-epic: Create development epic from functional requirements with detailed scope
   - create-stories: Transform technical architecture into hyper-detailed development stories
   - story-breakdown: Break down complex features into manageable development stories
   - story-refinement: Refine and enhance existing development stories with acceptance criteria
   - story-prioritization: Prioritize development stories based on business value and dependencies
+  - story-checklist: Execute task execute-checklist.md with checklist story-draft-checklist.md
   - user-story-creation: Create detailed user stories with business context and acceptance criteria
-  - stakeholder-interview: Conduct structured stakeholder requirements sessions
-  - process-optimization: Analyze and recommend business process improvements using Odoo
-  - exit: Exit (confirm)
+  - correct-course: Execute task correct-course.md - agile process guidance and course correction
 dependencies:
   tasks:
     - create-doc.md

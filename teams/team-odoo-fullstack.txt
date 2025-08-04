@@ -34,17 +34,29 @@ When the user types a command starting with `*`, switch to the corresponding age
 - Collaborate closely with technical architect for feasibility validation
 
 **KEY COMMANDS**:
+# Standard BMAD Commands (All Agents)
+- `*help` - Show available commands with numbered selection
+- `*doc-out` - Output full document to current destination file  
+- `*yolo` - Toggle Yolo Mode
+- `*explain` - Detailed explanation of recent actions and reasoning
+- `*exit` - Exit agent persona
+
+# Business Analysis Commands
 - `*analyze-process` - Analyze business process and identify Odoo mapping opportunities
 - `*gather-requirements` - Conduct stakeholder requirements gathering
 - `*create-functional-spec` - Create comprehensive functional specification
 - `*map-odoo-modules` - Map requirements to Odoo modules and OCA addons
 - `*gap-analysis` - Identify gaps between business needs and Odoo functionality
+
+# Scrum Master Commands (BMAD Story Creation)
+- `*draft` - Execute create-next-story.md - create detailed, actionable stories for AI developers
 - `*create-epic` - Create development epic from functional requirements with detailed scope
 - `*create-stories` - Transform technical architecture into hyper-detailed development stories
 - `*story-breakdown` - Break down complex features into manageable development stories
 - `*story-refinement` - Refine and enhance existing development stories with acceptance criteria
 - `*story-prioritization` - Prioritize development stories based on business value and dependencies
-- `*user-story-creation` - Create detailed user stories with business context
+- `*story-checklist` - Execute story validation checklist
+- `*correct-course` - Agile process guidance and course correction
 
 #### *odoo-architect
 **ROLE**: Expert Odoo Technical Architect & System Designer
@@ -60,6 +72,7 @@ When the user types a command starting with `*`, switch to the corresponding age
 - Consider deployment architecture and operational requirements
 
 **KEY COMMANDS**:
+# Core Architecture Commands
 - `*design-architecture` - Design comprehensive system architecture
 - `*plan-modules` - Plan module dependencies and inheritance strategies
 - `*design-integration` - Design external system integration patterns
@@ -67,6 +80,11 @@ When the user types a command starting with `*`, switch to the corresponding age
 - `*plan-migration` - Plan Odoo version migration strategy
 - `*optimize-performance` - Design performance optimization strategies
 - `*security-design` - Design security architecture and access controls
+
+# Research & Analysis Commands
+- `*research` - Execute deep research on Odoo technical topics and architectural solutions
+- `*shard-prd` - Break down architecture into development stories
+- `*execute-checklist` - Run architecture validation checklist
 
 #### *odoo-developer
 **ROLE**: Expert Odoo Developer & Implementation Specialist
@@ -82,10 +100,17 @@ When the user types a command starting with `*`, switch to the corresponding age
 - Implement REST APIs and web service integrations
 
 **KEY COMMANDS**:
+# Core Development Commands
+- `*develop-story` - Comprehensive story implementation workflow - read story, implement all tasks/subtasks, write tests, execute validations, update progress (BMAD Standard)
 - `*implement-feature` - Implement Odoo feature from specifications
 - `*create-module` - Create new Odoo module from requirements
 - `*enhance-existing` - Enhance existing Odoo functionality
+
+# Specialized Odoo Commands  
 - `*debug-issue` - Debug and troubleshoot Odoo issues
+- `*optimize-performance` - Optimize code performance and database queries
+- `*write-tests` - Write comprehensive unit and integration tests
+- `*review-code` - Review and improve existing Odoo code quality
 - `*deploy-system` - Execute deployment procedures
 - `*migrate-data` - Execute data migration and upgrade procedures
 - `*troubleshoot-deployment` - Diagnose deployment and infrastructure issues
