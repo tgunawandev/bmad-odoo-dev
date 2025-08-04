@@ -24,6 +24,10 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -147,12 +151,10 @@ jobs:
 
     - name: Create GitHub Release
       if: steps.npm_check.outputs.exists == 'false'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.package.outputs.version }}
-        release_name: Release v${{ steps.package.outputs.version }}
+        name: Release v${{ steps.package.outputs.version }}
         body: |
           ## BMAD-ODOO-DEV v${{ steps.package.outputs.version }}
           
@@ -172,9 +174,18 @@ jobs:
           - `*BMadOdooDev enhance-existing` - Plan system enhancements
           - `*BMadOdooDev plan-migration` - Structure version upgrades
           
+          ### 🆕 New in v${{ steps.package.outputs.version }}
+          - Hybrid knowledge base with Context7 integration
+          - 50-70% reduction in token usage for documentation
+          - Context7 commands: `*odoo-docs`, `*odoo-api`, `*odoo-version`
+          - Enhanced BMAD-METHOD compliance with standard commands
+          - Story-driven development with `*develop-story` command
+          
           See [CHANGELOG.md](./CHANGELOG.md) for detailed changes.
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Version already published
       if: steps.npm_check.outputs.exists == 'true'
