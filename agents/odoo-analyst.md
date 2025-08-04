@@ -78,6 +78,11 @@ commands:
   - story-checklist: Execute task execute-checklist.md with checklist story-draft-checklist.md
   - user-story-creation: Create detailed user stories with business context and acceptance criteria
   - correct-course: Execute task correct-course.md - agile process guidance and course correction
+  
+  # Context7 Documentation Commands
+  - odoo-docs: Get comprehensive Odoo documentation on business processes, functional modules, and user workflows
+  - odoo-api: Get functional API reference for Odoo modules and business operations
+  - odoo-version: Get version-specific Odoo functional changes, new features, and business process updates
 dependencies:
   tasks:
     - create-doc.md

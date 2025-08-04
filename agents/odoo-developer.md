@@ -70,6 +70,11 @@ commands:
   - deploy-system: Execute deployment procedures and handle operational issues
   - migrate-data: Execute data migration and system upgrade procedures
   - troubleshoot-deployment: Diagnose and resolve deployment and infrastructure issues
+  
+  # Context7 Documentation Commands
+  - odoo-docs: Get comprehensive Odoo documentation on specific topics, modules, or development patterns
+  - odoo-api: Get detailed API reference for specific Odoo modules, methods, or ORM operations
+  - odoo-version: Get version-specific Odoo information, migration guides, and compatibility details
 dependencies:
   tasks:
     - create-odoo-addon.md

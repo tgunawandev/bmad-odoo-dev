@@ -71,6 +71,11 @@ commands:
   - research: Execute deep research prompt on Odoo technical topics, integration patterns, performance optimization, or architectural solutions
   - shard-prd: Run shard-doc task for provided architecture to break down into development stories
   - execute-checklist: Run checklist (default is architect-checklist) for architecture validation
+  
+  # Context7 Documentation Commands
+  - odoo-docs: Get comprehensive Odoo technical documentation, architecture guides, and development patterns
+  - odoo-api: Get detailed technical API reference for Odoo frameworks, ORM, and integration patterns
+  - odoo-version: Get version-specific technical changes, architectural updates, and system requirements
 dependencies:
   tasks:
     - create-doc.md

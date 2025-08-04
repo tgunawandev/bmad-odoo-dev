@@ -1,55 +1,163 @@
 # Odoo Knowledge Base for BMAD-METHOD-ODOO
 
-## Overview
+## Essential Patterns & Quick Reference
 
-This knowledge base provides comprehensive information for AI agents working with Odoo development using BMAD-METHOD workflows. It covers Odoo-specific patterns, best practices, and integration with the BMAD framework.
+> **Note**: For comprehensive, up-to-date Odoo documentation, use Context7 commands:
+> - `*odoo-docs {topic}` - Get specific Odoo documentation  
+> - `*odoo-api {module}` - Get API reference for modules
+> - `*odoo-version {version} {topic}` - Get version-specific information
 
-## Odoo Fundamentals
+### Core Inheritance Patterns
 
-### Odoo Architecture Principles
-
-**Model-View-Controller (MVC) Pattern**:
-- **Models**: Business logic and data management (`models/` directory)
-- **Views**: User interface definitions (`views/` directory)
-- **Controllers**: HTTP request handling and routing
-
-**ORM (Object-Relational Mapping)**:
-- All database operations through Odoo ORM
-- Automatic SQL generation and optimization
-- Record-based operations with active record patterns
-- Built-in security and access control
-
-**Module-Based Architecture**:
-- Functionality organized in self-contained modules
-- Clean separation of concerns
-- Dependency management through manifest files
-- Inheritance and extension patterns
-
-### Odoo Development Patterns
-
-**Inheritance Strategies**:
+**Class Inheritance** (extending models):
 ```python
-# Class inheritance - extending existing models
 class ResPartnerExtension(models.Model):
     _inherit = 'res.partner'
     custom_field = fields.Char('Custom Field')
+```
 
-# Prototype inheritance - creating variants
-class ResPartnerVariant(models.Model):
-    _inherits = {'res.partner': 'partner_id'}
+**Prototype Inheritance** (delegation):
+```python
+class CustomPartner(models.Model):
     _name = 'custom.partner'
+    _inherits = {'res.partner': 'partner_id'}
     partner_id = fields.Many2one('res.partner', required=True, ondelete='cascade')
 ```
 
-**Security Model**:
-- Group-based access control
-- Model-level permissions (CRUD)
-- Record-level rules (row-level security)
-- Field-level access control
+**In-place Extension**:
+```python
+class ResPartner(models.Model):
+    _inherit = 'res.partner'  # No _name = extends existing model
+    new_field = fields.Char('New Field')
+```
+
+### Essential Field Types
+
+| Type | Usage | Example |
+|------|-------|---------|
+| `Char` | Short text | `name = fields.Char('Name', required=True)` |
+| `Text` | Long text | `description = fields.Text('Description')` |
+| `Integer` | Numbers | `quantity = fields.Integer('Quantity', default=1)` |
+| `Float` | Decimals | `price = fields.Float('Price', digits=(16,2))` |
+| `Boolean` | True/False | `active = fields.Boolean('Active', default=True)` |
+| `Date` | Date only | `date_start = fields.Date('Start Date')` |
+| `Datetime` | Date + Time | `create_date = fields.Datetime('Created')` |
+| `Selection` | Dropdown | `state = fields.Selection([('draft','Draft')], 'State')` |
+| `Many2one` | Foreign key | `partner_id = fields.Many2one('res.partner')` |
+| `One2many` | Reverse FK | `line_ids = fields.One2many('sale.line', 'order_id')` |
+| `Many2many` | Link table | `tag_ids = fields.Many2many('product.tag')` |
+
+### Common ORM Operations
+
+**Creating Records**:
+```python
+# Single record
+record = self.env['model.name'].create({'field1': 'value1'})
+
+# Multiple records  
+records = self.env['model.name'].create([
+    {'field1': 'value1'}, {'field1': 'value2'}
+])
+```
+
+**Reading/Searching**:
+```python
+# Search and read
+records = self.env['model.name'].search([('field', '=', 'value')])
+records = self.env['model.name'].search([('field', 'in', ['val1', 'val2'])])
+
+# Browse by ID
+record = self.env['model.name'].browse(record_id)
+```
+
+**Updating Records**:
+```python
+records.write({'field1': 'new_value'})
+```
+
+### Essential Mixins
+
+| Mixin | Purpose | Key Fields Added |
+|-------|---------|------------------|
+| `mail.thread` | Chatter/messaging | `message_ids`, tracking |
+| `website.published.mixin` | Website visibility | `website_published`, `website_url` |
+| `portal.mixin` | Customer portal access | `access_url`, `access_token` |
+| `rating.mixin` | Customer ratings | Rating functionality |
+
+### Security Patterns
+
+**Groups**: `res.groups.xml`
+```xml
+<record id="group_manager" model="res.groups">
+    <field name="name">Manager</field>
+    <field name="category_id" ref="base.module_category"/>
+</record>
+```
+
+**Access Rights**: `ir.model.access.csv`
+```csv
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_model_user,model.access.user,model_model,base.group_user,1,0,0,0
+```
+
+**Record Rules**: Domain-based row-level security
+```python
+<record id="rule_own_records" model="ir.rule">
+    <field name="domain">[('user_id', '=', user.id)]</field>
+</record>
+```
 
 ## BMAD-METHOD Integration
 
-### Workflow Integration Points
+### Workflow Phases
+
+1. **Business Analysis** (*odoo-analyst): Requirements → Functional Specs → User Stories
+2. **Architecture** (*odoo-architect): Technical Design → Module Planning → Integration Strategy  
+3. **Story Creation** (*odoo-analyst as SM): Architecture → Development Stories
+4. **Development** (*odoo-developer): Stories → Implementation → Testing → Deployment
+
+### Story-Driven Development
+
+**Epic Structure**: Business feature → Technical components → Development stories
+**Story Format**: BMAD standard with Odoo-specific acceptance criteria
+**Implementation**: `*develop-story` command follows BMAD workflow
+
+### OCA Compliance Checklist
+
+- [ ] Follow OCA coding standards and conventions
+- [ ] Use proper module structure and naming
+- [ ] Include comprehensive tests and documentation  
+- [ ] Implement proper security and access controls
+- [ ] Follow inheritance patterns for maintainability
+- [ ] Use standard Odoo patterns and avoid custom solutions
+
+## Troubleshooting Quick Reference
+
+### Common Issues
+
+**Import Errors**: Check `__init__.py` files and circular imports
+**Field Errors**: Verify field definitions and database schema
+**Access Errors**: Check security groups and record rules
+**View Errors**: Validate XML syntax and field references
+**ORM Errors**: Use `self.env.cr.commit()` carefully in transactions
+
+### Debug Commands
+
+```python
+# Enable developer mode
+import logging
+_logger = logging.getLogger(__name__)
+_logger.info("Debug message")
+
+# SQL debugging  
+self.env.cr.execute("SELECT * FROM table WHERE condition")
+results = self.env.cr.fetchall()
+```
+
+---
+
+> **For comprehensive documentation**: Use Context7 integration commands available in all agents
+> **For BMAD workflows**: Follow story-driven development patterns
 
 **Planning Phase (Web UI)**:
 - Use Odoo Functional Consultant for business process analysis
