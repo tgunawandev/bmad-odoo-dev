@@ -1,6 +1,6 @@
-# BMAD-METHOD-ODOO: Odoo Development Expansion Pack
+# BMAD-ODOO-DEV: Odoo Development Expansion Pack
 
-[![Version](https://img.shields.io/npm/v/bmad-method-odoo?color=blue&label=version)](https://www.npmjs.com/package/bmad-method-odoo)
+[![Version](https://img.shields.io/npm/v/bmad-odoo-dev?color=blue&label=version)](https://www.npmjs.com/package/bmad-odoo-dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![BMAD-METHOD](https://img.shields.io/badge/BMAD--METHOD-v4.30%2B-brightgreen)](https://github.com/bmadcode/bmad-method)
 [![Odoo](https://img.shields.io/badge/Odoo-13%2B-purple)](https://www.odoo.com)
@@ -9,16 +9,14 @@
 
 ## Overview
 
-BMAD-METHOD-ODOO extends the powerful BMAD-METHOD framework with Odoo-specific expertise, transforming your AI agents into specialized Odoo development consultants. Perfect for brownfield projects, addon development, and enterprise Odoo customizations.
+BMAD-ODOO-DEV extends the powerful BMAD-METHOD framework with Odoo-specific expertise, transforming your AI agents into specialized Odoo development consultants. Perfect for brownfield projects, addon development, and enterprise Odoo customizations.
 
 ## Key Features
 
 ### 🎯 **Odoo-Specialized AI Agents**
-- **Odoo Functional Consultant**: Business process analysis and requirements gathering
-- **Odoo Technical Architect**: Module design, data modeling, and integration architecture  
-- **Odoo Developer**: Addon development with ORM expertise and inheritance patterns
-- **Odoo Migration Specialist**: Version upgrades and data migration strategies
-- **Doodba DevOps Expert**: Docker deployment and environment management
+- **Odoo Analyst (Sofia)**: Business process analysis, requirements gathering, functional specifications, epic creation, and development story management (includes Scrum Master responsibilities)
+- **Odoo Architect (Diego)**: System architecture, technical design, deployment strategy, and migration planning
+- **Odoo Developer (Carlos)**: Code implementation, module development, deployment execution, and troubleshooting
 
 ### 🔧 **Brownfield-Focused Workflows**
 - **Addon Creation**: From business requirement to deployable addon
@@ -49,12 +47,12 @@ BMAD-METHOD-ODOO extends the powerful BMAD-METHOD framework with Odoo-specific e
 
 ```bash
 # Simple one-command installation (integrates with existing BMAD-METHOD project)
-npx bmad-method-odoo install
+npx bmad-odoo-dev install
 ```
 
 That's it! This single command will:
 - Detect your existing BMAD-METHOD project (recommended but not required)
-- **Install 5 Odoo agents** into `.bmad-odoo-dev/agents/`
+- **Install 3 specialized Odoo agents** into `.bmad-odoo-dev/agents/`
 - **Add 3 Odoo tasks** to `.bmad-odoo-dev/tasks/`  
 - **Add 3 Odoo templates** to `.bmad-odoo-dev/templates/`
 - **Generate install manifest** for tracking and updates
@@ -66,7 +64,7 @@ If you prefer the traditional approach:
 
 ```bash
 # Install both packages locally
-npm install bmad-method bmad-method-odoo
+npm install bmad-method bmad-odoo-dev
 
 # Then run setup
 npx bmad-odoo install
@@ -81,21 +79,18 @@ After installation, Odoo agents are **automatically available** in your BMAD-MET
 **No file uploads needed!** The agents are automatically discovered by BMAD-METHOD.
 
 **Available Agents:**
-- `*odoo-functional-consultant` - Business process analysis and requirements
-- `*odoo-technical-architect` - System architecture and technical design  
-- `*odoo-developer` - Implementation and coding guidance
-- `*odoo-migration-specialist` - Version migrations and upgrades
-- `*doodba-devops-expert` - Deployment and infrastructure
+- `*odoo-analyst` - Business process analysis, requirements gathering, functional specifications, epic creation, and development story management (Scrum Master)
+- `*odoo-architect` - System architecture, technical design, deployment strategy, and migration planning
+- `*odoo-developer` - Code implementation, module development, deployment execution, and troubleshooting
 
 ### 2. Addon Development Workflow
 
 The expansion pack fully supports Odoo addon development with specialized tasks:
 
-**Available through `*OdooMethod` slash prefix:**
-- `*OdooMethod create-addon` - Complete addon generation from business requirements
-- `*OdooMethod enhance-existing` - Brownfield system enhancements  
-- `*OdooMethod plan-migration` - Version upgrade planning
-- `*OdooMethod doodba-deploy` - Deployment and infrastructure
+**Available through `*BMadOdooDev` slash prefix:**
+- `*BMadOdooDev create-addon` - Complete addon generation from business requirements
+- `*BMadOdooDev enhance-existing` - Brownfield system enhancements  
+- `*BMadOdooDev plan-migration` - Version upgrade planning
 
 **Integrated Templates:**
 - **Odoo PRD Template** - Business requirements with Odoo-specific sections
@@ -151,28 +146,33 @@ Works perfectly with your existing Odoo setup:
 
 ### Creating a New Addon
 
-1. **Planning Phase** (Web UI):
+1. **Business Analysis Phase** (Web UI):
    ```
-   *odoo-functional-consultant
+   *odoo-analyst
    "I need to create a sales commission addon for multi-tier sales teams"
    ```
 
 2. **Architecture Phase** (Web UI):
    ```
-   *odoo-technical-architect  
+   *odoo-architect  
    "Design the data model and integration points for this sales commission system"
    ```
 
-3. **Development Phase** (IDE):
+3. **Story Creation Phase** (Web UI):
+   ```
+   *odoo-analyst
+   "Transform the architecture into detailed development stories for the sales commission system"
+   ```
+
+4. **Development Phase** (IDE):
    - Stories created automatically with full context
-   - Odoo Developer agent provides ORM guidance
-   - Doodba DevOps expert handles deployment
+   - Odoo Developer agent provides ORM guidance and deployment execution
 
 ### Enhancing Existing System
 
 1. **Analysis**:
    ```
-   *OdooMethod enhance-existing
+   *BMadOdooDev enhance-existing
    "Add approval workflow to purchase orders over $10k"
    ```
 
@@ -190,9 +190,9 @@ Works perfectly with your existing Odoo setup:
 - **Document business logic** in functional specifications
 
 ### For BMAD Integration
-- **Start with PRD creation** using Odoo Functional Consultant
-- **Use architecture phase** for complex integrations
-- **Leverage story sharding** for development organization
+- **Start with business analysis** using Odoo Analyst
+- **Use architecture phase** for complex integrations and technical design
+- **Transform architecture into stories** using Odoo Analyst (Scrum Master role)
 - **Follow BMAD development cycle** for consistency
 
 ## Troubleshooting
@@ -202,14 +202,14 @@ Works perfectly with your existing Odoo setup:
 **Expansion pack not recognized:**
 ```bash
 # Ensure proper installation
-npm list bmad-method-odoo
-npx bmad-method validate --expansion-pack odoo
+npm list bmad-odoo-dev
+npx bmad-odoo validate
 ```
 
 **Odoo commands not available:**
 ```bash
 # Check slash prefix configuration
-grep -r "OdooMethod" node_modules/bmad-method-odoo/
+grep -r "BMadOdooDev" node_modules/bmad-odoo-dev/
 ```
 
 **Doodba integration issues:**
@@ -237,16 +237,16 @@ We welcome contributions to improve Odoo development workflows:
 ## Support & Community
 
 - 💬 [Discord Community](https://discord.gg/gk8jAdXWmj) - Join the BMAD community
-- 🐛 [Issue Tracker](https://github.com/tgunawandev/BMAD-METHOD-ODOO/issues)
-- 📚 [Documentation](https://github.com/tgunawandev/BMAD-METHOD-ODOO/wiki)
+- 🐛 [Issue Tracker](https://github.com/tgunawandev/bmad-odoo-dev/issues)
+- 📚 [Documentation](https://github.com/tgunawandev/bmad-odoo-dev/wiki)
 - 🎥 [Video Tutorials](https://www.youtube.com/@BMadCode) - BMAD-METHOD channel
 
 ## Compatibility
 
-| BMAD-METHOD | BMAD-METHOD-ODOO | Odoo Versions | Status |
-|-------------|------------------|---------------|---------|
-| 4.30.x+     | 1.0.x           | 13.0-18.0     | ✅ Active |
-| 4.25.x-4.29.x | -             | -             | ❌ Not supported |
+| BMAD-METHOD | BMAD-ODOO-DEV | Odoo Versions | Status |
+|-------------|---------------|---------------|---------|
+| 4.30.x+     | 1.3.x+        | 13.0-18.0     | ✅ Active |
+| 4.25.x-4.29.x | -           | -             | ❌ Not supported |
 
 ## License
 
@@ -284,4 +284,4 @@ This expansion pack stands on the shoulders of giants - thank you to all the con
 
 ---
 
-<sub>Built with ❤️ for the Odoo development community, extending the powerful BMAD-METHOD framework</sub>
+<sub>Built with ❤️ for the Odoo development community, extending the powerful BMAD-METHOD framework with streamlined 3-agent workflow and enhanced Scrum Master capabilities</sub>
