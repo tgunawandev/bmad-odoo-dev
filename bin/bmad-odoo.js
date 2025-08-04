@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name('bmad-odoo')
   .description('BMAD-METHOD-ODOO expansion pack CLI')
-  .version('1.3.0');
+  .version('1.4.0');
 
 // Calculate MD5 hash of file content
 function calculateFileHash(filePath) {
@@ -62,7 +62,7 @@ program
 
       // Copy config.yaml
       const configContent = `name: bmad-odoo-dev
-version: 1.3.0
+version: 1.4.0
 short-title: Odoo ERP Development Pack
 description: >-
   This expansion pack extends BMad Method with comprehensive Odoo ERP development
@@ -184,7 +184,7 @@ slashPrefix: BMadOdooDev`;
 
       // Generate install-manifest.yaml
       const installManifest = {
-        version: '1.3.0',
+        version: '1.4.0',
         installed_at: new Date().toISOString(),
         install_type: 'expansion-pack',
         expansion_pack_id: 'bmad-odoo-dev',
