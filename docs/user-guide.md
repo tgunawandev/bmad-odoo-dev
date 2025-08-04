@@ -1,10 +1,8 @@
-# BMAD-METHOD-ODOO User Guide Extension
+# BMAD-METHOD-ODOO User Guide
 
-This document provides the content to be added to the main BMAD-METHOD user guide for the Odoo expansion pack.
+Complete guide for using the BMAD-METHOD-ODOO expansion pack with specialized Odoo development agents.
 
-## Section: Special Agents (Add after existing special agents)
-
-### Odoo Expansion Pack Agents
+## Odoo Specialized Agents
 
 BMAD-METHOD-ODOO introduces specialized agents for Odoo ERP development:
 
@@ -83,9 +81,7 @@ BMAD-METHOD-ODOO introduces specialized agents for Odoo ERP development:
 "Design production deployment architecture for multi-database Odoo setup with 500+ concurrent users"
 ```
 
-## Section: Core Configuration (Add new subsection)
-
-### Odoo Expansion Pack Configuration
+## Installation and Configuration
 
 The BMAD-METHOD-ODOO expansion pack extends the core framework with domain-specific capabilities for Odoo development.
 
@@ -144,9 +140,7 @@ npx bmad-odoo agents
 npx bmad-odoo team-files
 ```
 
-## Section: Workflow Integration (Add new section)
-
-### Odoo Development Workflow
+## Odoo Development Workflow
 
 The BMAD-METHOD-ODOO expansion pack provides a specialized workflow for Odoo ERP development projects.
 
@@ -216,9 +210,7 @@ All generated code and guidance follows OCA (Odoo Community Association) standar
 - Security best practices implementation  
 - Community contribution readiness
 
-## Section: Best Practices (Add subsection)
-
-### Odoo Development Best Practices
+## Best Practices
 
 #### Brownfield Development Focus
 
