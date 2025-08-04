@@ -42,50 +42,42 @@ BMAD-METHOD-ODOO extends the powerful BMAD-METHOD framework with Odoo-specific e
 
 ### Prerequisites
 
-- [BMAD-METHOD](https://github.com/bmadcode/bmad-method) v4.30+ installed
-- Node.js v20+
+- Node.js v20+ (BMAD-METHOD core will be installed automatically)
 - Existing Odoo project (recommended) or new project setup
 
 ### Installation
 
 ```bash
-# Install alongside BMAD-METHOD
-npm install bmad-method-odoo
-
-# Or if using with existing BMAD-METHOD installation
-cd your-project
-npx bmad-method install
-# Then add bmad-method-odoo to your package.json dependencies
+# Simple one-command installation (installs both BMAD-METHOD core and Odoo expansion)
+npx bmad-method-odoo install
 ```
 
-### Quick Setup for Existing Odoo Projects
+That's it! This single command will:
+- Install BMAD-METHOD core (if not already installed)
+- Set up the Odoo expansion pack
+- Copy team configuration files to your project
+- No local compilation or npm install required
 
-If you already have a Doodba-based Odoo project:
+### Alternative Installation
+
+If you prefer the traditional approach:
 
 ```bash
-# Navigate to your Odoo project root
-cd /path/to/your/odoo-project
-
-# Install BMAD-METHOD-ODOO
-npm init -y  # If no package.json exists
+# Install both packages locally
 npm install bmad-method bmad-method-odoo
 
-# Initialize BMAD with Odoo expansion
-npx bmad-method install --expansion-pack odoo
+# Then run setup
+npx bmad-odoo install
 ```
 
 ## Usage
 
 ### 1. Web UI Planning Phase
 
-Create a new AI agent (Gemini Gem, CustomGPT) and upload the Odoo team file:
+The installation process automatically copies team files to your project directory. Simply upload the team file to your AI agent:
 
-```bash
-# Get the Odoo-specific team bundle
-cp node_modules/bmad-method-odoo/dist/teams/team-odoo-fullstack.txt ./
-```
-
-Set instructions: *"Your critical operating instructions are attached, do not break character as directed"*
+**File**: `team-odoo-fullstack.txt` (already in your project directory)  
+**Instructions**: *"Your critical operating instructions are attached, do not break character as directed"*
 
 Start planning:
 - `*odoo-functional-consultant` - Business process analysis

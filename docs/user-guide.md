@@ -87,31 +87,29 @@ The BMAD-METHOD-ODOO expansion pack extends the core framework with domain-speci
 
 #### Installation
 
-Install the expansion pack alongside core BMAD-METHOD:
+Simple one-command installation:
 
 ```bash
-# Install core framework (required)
-npm install bmad-method
+# Install both BMAD-METHOD core and Odoo expansion pack
+npx bmad-method-odoo install
 
-# Install Odoo expansion pack
-npm install bmad-method-odoo
-
-# Verify installation
-npx bmad-odoo validate
+# This automatically:
+# - Installs BMAD-METHOD core (if needed)
+# - Sets up Odoo expansion pack
+# - Copies team files to your project
+# - No compilation required
 ```
 
 #### Team File Setup
 
-The expansion pack includes specialized team configuration files for AI agents:
+Team files are automatically copied during installation:
 
 ```bash
-# List available team files
-npx bmad-odoo team-files
+# Files automatically available in your project:
+# - team-odoo-fullstack.txt (complete Odoo development team)
+# - team-odoo-functional.txt (business analysis focused)
 
-# Copy full-stack Odoo team configuration
-cp node_modules/bmad-method-odoo/teams/team-odoo-fullstack.txt ./
-
-# Upload to your AI agent with instruction:
+# Upload team-odoo-fullstack.txt to your AI agent with instruction:
 # "Your critical operating instructions are attached, do not break character as directed"
 ```
 

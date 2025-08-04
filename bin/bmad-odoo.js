@@ -21,27 +21,42 @@ program
     console.log(chalk.blue('🚀 Installing BMAD-METHOD-ODOO expansion pack...'));
     
     try {
-      // Check if bmad-method is installed
-      const bmadPath = path.join(process.cwd(), 'node_modules', 'bmad-method');
-      if (!await fs.pathExists(bmadPath)) {
-        console.error(chalk.red('❌ BMAD-METHOD core not found. Please install bmad-method first:'));
-        console.log(chalk.yellow('   npm install bmad-method'));
-        process.exit(1);
+      // First install BMAD-METHOD core if not present
+      console.log(chalk.blue('📦 Checking BMAD-METHOD core installation...'));
+      
+      try {
+        // Try to run bmad-method to check if it's installed
+        const { execSync } = require('child_process');
+        execSync('npx bmad-method --version', { stdio: 'pipe' });
+        console.log(chalk.green('✅ BMAD-METHOD core found'));
+      } catch (error) {
+        console.log(chalk.yellow('📥 Installing BMAD-METHOD core...'));
+        const { execSync } = require('child_process');
+        execSync('npx bmad-method install', { stdio: 'inherit' });
+        console.log(chalk.green('✅ BMAD-METHOD core installed'));
       }
 
-      // Check version compatibility
-      const bmadPackage = await fs.readJSON(path.join(bmadPath, 'package.json'));
-      if (!semver.satisfies(bmadPackage.version, '>=4.30.0')) {
-        console.error(chalk.red(`❌ BMAD-METHOD version ${bmadPackage.version} is not compatible.`));
-        console.log(chalk.yellow('   Please upgrade to version 4.30.0 or higher.'));
-        process.exit(1);
+      // Copy team files to current directory
+      const teamSrcDir = path.join(__dirname, '..', 'teams');
+      if (await fs.pathExists(teamSrcDir)) {
+        console.log(chalk.blue('📂 Setting up Odoo team files...'));
+        
+        const teamFiles = await fs.readdir(teamSrcDir);
+        for (const file of teamFiles) {
+          if (file.endsWith('.txt')) {
+            const srcPath = path.join(teamSrcDir, file);
+            const destPath = path.join(process.cwd(), file);
+            await fs.copy(srcPath, destPath);
+            console.log(chalk.green(`   ✅ ${file} → ${destPath}`));
+          }
+        }
       }
 
-      console.log(chalk.green('✅ BMAD-METHOD-ODOO expansion pack installed successfully!'));
+      console.log(chalk.green('\n✅ BMAD-METHOD-ODOO expansion pack installed successfully!'));
       console.log(chalk.blue('\n📚 Next steps:'));
-      console.log('   1. Copy team files: cp node_modules/bmad-method-odoo/teams/team-odoo-fullstack.txt ./');
-      console.log('   2. Upload to your AI agent with instruction: "Your critical operating instructions are attached"');
-      console.log('   3. Use Odoo agents: *odoo-functional-consultant, *odoo-technical-architect, etc.');
+      console.log('   1. Upload team-odoo-fullstack.txt to your AI agent');
+      console.log('   2. Use instruction: "Your critical operating instructions are attached"');
+      console.log('   3. Use Odoo agents: *odoo-functional-consultant, *odoo-technical-architect');
       console.log('   4. Use slash commands: *OdooMethod create-addon, *OdooMethod enhance-existing');
       
     } catch (error) {
