@@ -26,6 +26,48 @@ integration:
   extendsCore: true
   standalone: false
   
+# Available agents
+agents:
+  - name: odoo-functional-consultant
+    file: agents/odoo-functional-consultant.md
+    role: Business process analysis and requirements gathering
+  - name: odoo-technical-architect
+    file: agents/odoo-technical-architect.md
+    role: System architecture and technical design
+  - name: odoo-developer
+    file: agents/odoo-developer.md
+    role: Implementation and coding guidance
+  - name: odoo-migration-specialist
+    file: agents/odoo-migration-specialist.md
+    role: Version migrations and upgrades
+  - name: doodba-devops-expert
+    file: agents/doodba-devops-expert.md
+    role: Deployment and infrastructure management
+
+# Available tasks
+tasks:
+  - name: create-odoo-addon
+    file: tasks/create-odoo-addon.md
+    description: Generate new Odoo addon from business requirements
+  - name: enhance-existing-odoo-system
+    file: tasks/enhance-existing-odoo-system.md
+    description: Plan brownfield system enhancements
+  - name: plan-odoo-migration
+    file: tasks/plan-odoo-migration.md
+    description: Structure version upgrade approach
+
+# Available templates
+templates:
+  - name: odoo-prd-template
+    file: templates/odoo-prd-template.yaml
+    description: Product requirements for Odoo implementations
+  - name: odoo-architecture-template
+    file: templates/odoo-architecture-template.yaml
+    description: Technical architecture for Odoo modules
+  - name: odoo-story-template
+    file: templates/odoo-story-template.yaml
+    description: User story template for Odoo development
+
 # File structure
 structure:
   agents: agents/
@@ -33,3 +75,4 @@ structure:
   templates: templates/
   data: data/
   checklists: checklists/
+  teams: teams/
