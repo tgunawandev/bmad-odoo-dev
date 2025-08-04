@@ -91,6 +91,55 @@ program
         }
       }
 
+      // Update install-manifest.yaml to register expansion pack and files
+      const manifestPath = path.join(bmadCorePath, 'install-manifest.yaml');
+      if (await fs.pathExists(manifestPath)) {
+        console.log(chalk.blue('⚙️  Registering expansion pack in install manifest...'));
+        
+        const manifestContent = await fs.readFile(manifestPath, 'utf8');
+        const manifest = yaml.parse(manifestContent);
+        
+        // Add expansion pack
+        if (!manifest.expansion_packs) {
+          manifest.expansion_packs = [];
+        }
+        
+        const odooPackExists = manifest.expansion_packs.some(pack => pack.name === 'bmad-method-odoo');
+        if (!odooPackExists) {
+          manifest.expansion_packs.push({
+            name: 'bmad-method-odoo',
+            version: '1.1.0',
+            installed_at: new Date().toISOString()
+          });
+        }
+        
+        // Add agent files to manifest
+        const odooAgentFiles = [
+          'odoo-functional-consultant.md',
+          'odoo-technical-architect.md', 
+          'odoo-developer.md',
+          'odoo-migration-specialist.md',
+          'doodba-devops-expert.md'
+        ];
+        
+        for (const agentFile of odooAgentFiles) {
+          const agentPath = `.bmad-core/agents/${agentFile}`;
+          const existsInManifest = manifest.files.some(file => file.path === agentPath);
+          
+          if (!existsInManifest) {
+            manifest.files.push({
+              path: agentPath,
+              hash: 'expansion-pack-file',
+              modified: false
+            });
+          }
+        }
+        
+        // Write updated manifest
+        await fs.writeFile(manifestPath, yaml.stringify(manifest));
+        console.log(chalk.green('   ✅ Updated install-manifest.yaml with expansion pack registration'));
+      }
+
       // Update core-config.yaml to add Odoo expansion pack
       const configPath = path.join(bmadCorePath, 'core-config.yaml');
       if (await fs.pathExists(configPath)) {
@@ -106,7 +155,7 @@ program
         if (!configContent.includes('bmad-method-odoo')) {
           configContent += `  bmad-method-odoo:
     enabled: true
-    version: "1.0.2"
+    version: "1.1.0"
     slashPrefix: "OdooMethod"
     agents: ["odoo-functional-consultant", "odoo-technical-architect", "odoo-developer", "odoo-migration-specialist", "doodba-devops-expert"]
     domain: "odoo-development"
