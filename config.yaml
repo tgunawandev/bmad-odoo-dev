@@ -1,13 +1,13 @@
-name: bmad-method-odoo
-version: 1.0.0
-short-title: Odoo Development Pack
+name: bmad-odoo-dev
+version: 1.2.0
+short-title: Odoo ERP Development Pack
 description: >-
-  This expansion pack extends BMad Method with comprehensive Odoo development 
-  capabilities. It's designed for teams working with Odoo ERP systems, focusing 
-  on addon development, brownfield enhancements, Doodba deployments, and OCA 
-  community patterns. Perfect for businesses extending Odoo functionality.
-author: Tri Gunawan (Kodemeio), extending BMad-Method by Brian (BMad)
-slashPrefix: OdooMethod
+  This expansion pack extends BMad Method with comprehensive Odoo ERP development
+  capabilities. It's designed for teams that need to define, implement, and manage
+  Odoo modules, customizations, and integrations using Doodba deployment patterns
+  and OCA community standards.
+author: BMad Community
+slashPrefix: BMadOdooDev
 category: domain-specific
 domain: odoo-development
 framework: doodba

@@ -200,15 +200,15 @@ slashPrefix: BMadOdooDev`;
       console.log(chalk.green('\n✅ BMAD-ODOO-DEV expansion pack installed successfully!'));
       console.log(chalk.blue(`\n📁 Installed to: ${expansionDir}/`));
       console.log(chalk.blue('\n🎯 Odoo agents now available:'));
-      console.log('   • /BMadOdooDev:agents:odoo-functional-consultant');
-      console.log('   • /BMadOdooDev:agents:odoo-technical-architect');
-      console.log('   • /BMadOdooDev:agents:odoo-developer');
-      console.log('   • /BMadOdooDev:agents:odoo-migration-specialist');
-      console.log('   • /BMadOdooDev:agents:doodba-devops-expert');
+      console.log('   • *odoo-functional-consultant');
+      console.log('   • *odoo-technical-architect');
+      console.log('   • *odoo-developer');
+      console.log('   • *odoo-migration-specialist');
+      console.log('   • *doodba-devops-expert');
       console.log(chalk.blue('\n⚡ Slash commands available:'));
-      console.log('   • /BMadOdooDev create-addon');
-      console.log('   • /BMadOdooDev enhance-existing');
-      console.log('   • /BMadOdooDev plan-migration');
+      console.log('   • *BMadOdooDev create-addon');
+      console.log('   • *BMadOdooDev enhance-existing');
+      console.log('   • *BMadOdooDev plan-migration');
       console.log(chalk.yellow('\n🔄 Please restart Claude Code to discover new agents'));
       
     } catch (error) {
@@ -294,10 +294,10 @@ program
     
     console.log(chalk.blue('\n⚙️  Available slash commands:'));
     const commands = [
-      { name: '*OdooMethod create-addon', desc: 'Generate new Odoo addon' },
-      { name: '*OdooMethod enhance-existing', desc: 'Plan system enhancements' },
-      { name: '*OdooMethod plan-migration', desc: 'Structure version upgrades' },
-      { name: '*OdooMethod doodba-deploy', desc: 'Deployment planning' }
+      { name: '*BMadOdooDev create-addon', desc: 'Generate new Odoo addon' },
+      { name: '*BMadOdooDev enhance-existing', desc: 'Plan system enhancements' },
+      { name: '*BMadOdooDev plan-migration', desc: 'Structure version upgrades' },
+      { name: '*BMadOdooDev doodba-deploy', desc: 'Deployment planning' }
     ];
     
     commands.forEach(cmd => {
