@@ -1,6 +1,6 @@
 {
   "name": "bmad-method-odoo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "BMAD-METHOD expansion pack for comprehensive Odoo ERP development workflows",
   "main": "index.js",
   "bin": {
