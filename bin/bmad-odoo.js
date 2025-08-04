@@ -62,7 +62,7 @@ program
 
       // Copy config.yaml
       const configContent = `name: bmad-odoo-dev
-version: 1.2.0
+version: 1.3.0
 short-title: Odoo ERP Development Pack
 description: >-
   This expansion pack extends BMad Method with comprehensive Odoo ERP development
@@ -74,7 +74,7 @@ slashPrefix: BMadOdooDev`;
       
       const configPath = path.join(expansionPath, 'config.yaml');
       await fs.writeFile(configPath, configContent);
-      console.log(chalk.green(`   ✅ Config: config.yaml`));
+      console.log(chalk.green('   ✅ Config: config.yaml'));
       
       installedFiles.push({
         path: `${expansionDir}/config.yaml`,
@@ -184,7 +184,7 @@ slashPrefix: BMadOdooDev`;
 
       // Generate install-manifest.yaml
       const installManifest = {
-        version: '1.2.0',
+        version: '1.3.0',
         installed_at: new Date().toISOString(),
         install_type: 'expansion-pack',
         expansion_pack_id: 'bmad-odoo-dev',
@@ -195,7 +195,7 @@ slashPrefix: BMadOdooDev`;
 
       const manifestPath = path.join(expansionPath, 'install-manifest.yaml');
       await fs.writeFile(manifestPath, yaml.stringify(installManifest));
-      console.log(chalk.green(`   ✅ Manifest: install-manifest.yaml`));
+      console.log(chalk.green('   ✅ Manifest: install-manifest.yaml'));
 
       console.log(chalk.green('\n✅ BMAD-ODOO-DEV expansion pack installed successfully!'));
       console.log(chalk.blue(`\n📁 Installed to: ${expansionDir}/`));
