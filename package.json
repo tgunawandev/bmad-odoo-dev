@@ -72,7 +72,8 @@
     "test": "jest",
     "lint": "eslint .",
     "prepare": "npm run build",
-    "validate": "node scripts/validate.js"
+    "validate": "node scripts/validate.js",
+    "publish-manual": "node scripts/publish.js"
   },
   "bmadMethod": {
     "expansionPack": true,
