@@ -53,12 +53,11 @@ npx bmad-method-odoo install
 ```
 
 That's it! This single command will:
-- Detect your existing BMAD-METHOD project (requires .bmad-core folder)
-- Install BMAD-METHOD core if needed
-- **Integrate 5 Odoo agents** into `.bmad-core/agents/`
-- **Add 3 Odoo tasks** to `.bmad-core/tasks/`  
-- **Add 3 Odoo templates** to `.bmad-core/templates/`
-- **Update configuration** in `core-config.yaml`
+- Detect your existing BMAD-METHOD project (recommended but not required)
+- **Install 5 Odoo agents** into `.bmad-odoo-dev/agents/`
+- **Add 3 Odoo tasks** to `.bmad-odoo-dev/tasks/`  
+- **Add 3 Odoo templates** to `.bmad-odoo-dev/templates/`
+- **Generate install manifest** for tracking and updates
 - **No manual file uploads required** - seamless integration!
 
 ### Alternative Installation
@@ -79,7 +78,7 @@ npx bmad-odoo install
 
 After installation, Odoo agents are **automatically available** in your BMAD-METHOD project:
 
-**No file uploads needed!** The agents are integrated into your `.bmad-core` structure.
+**No file uploads needed!** The agents are automatically discovered by BMAD-METHOD.
 
 **Available Agents:**
 - `*odoo-functional-consultant` - Business process analysis and requirements
