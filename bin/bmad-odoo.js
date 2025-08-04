@@ -278,7 +278,7 @@ program
     console.log(chalk.blue('🤖 Available Odoo specialist agents:'));
     
     const agents = [
-      { name: '*odoo-analyst', desc: 'Business process analysis, requirements gathering, and functional specifications' },
+      { name: '*odoo-analyst', desc: 'Business process analysis, requirements gathering, functional specifications, epic creation, and development story management (Scrum Master)' },
       { name: '*odoo-architect', desc: 'System architecture, technical design, deployment strategy, and migration planning' },
       { name: '*odoo-developer', desc: 'Code implementation, module development, deployment execution, and troubleshooting' }
     ];

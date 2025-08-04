@@ -30,7 +30,7 @@ integration:
 agents:
   - name: odoo-analyst
     file: agents/odoo-analyst.md
-    role: Business process analysis, requirements gathering, and functional specifications
+    role: Business process analysis, requirements gathering, functional specifications, epic creation, and development story management (includes Scrum Master responsibilities)
   - name: odoo-architect
     file: agents/odoo-architect.md
     role: System architecture, technical design, deployment strategy, and migration planning
