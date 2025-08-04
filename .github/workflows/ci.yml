@@ -1,0 +1,85 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Validate expansion pack structure
+      run: npm run validate
+    
+    - name: Build distribution
+      run: npm run build
+
+  validate-bmad-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install BMAD-METHOD core
+      run: npm install bmad-method@latest
+    
+    - name: Install current package
+      run: npm install
+    
+    - name: Test compatibility
+      run: npx bmad-odoo validate
+
+  publish:
+    needs: [test, validate-bmad-compatibility]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build package
+      run: npm run build
+    
+    - name: Publish to NPM
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

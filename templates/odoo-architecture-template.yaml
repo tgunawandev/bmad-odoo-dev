@@ -1,0 +1,1254 @@
+template:
+  id: odoo-architecture-template-v1
+  name: Odoo Technical Architecture Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/architecture.md
+    title: "{{project_name}} - Technical Architecture Document"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: Introduction
+    instruction: |
+      Review the Product Requirements Document (PRD) and any existing technical documentation 
+      to understand the business context before designing the technical architecture.
+    sections:
+      - id: architecture-overview
+        title: Architecture Overview
+        instruction: |
+          Provide a high-level overview of the technical architecture for this Odoo implementation:
+          
+          1. **Business Context**: Brief summary of business requirements driving this architecture
+          2. **Technical Approach**: Overall strategy for implementing the solution
+          3. **Key Architectural Decisions**: Major technical choices and their rationale
+          4. **Architecture Principles**: Guiding principles for this implementation
+          
+          **Architecture Principles for Odoo**:
+          - Leverage standard Odoo functionality wherever possible
+          - Follow OCA (Odoo Community Association) best practices
+          - Design for maintainability and future Odoo version compatibility
+          - Implement proper separation of concerns between modules
+          - Ensure scalability for expected growth
+          - Maintain data integrity and security standards
+        elicit: true
+
+      - id: target-environment
+        title: Target Environment
+        instruction: |
+          Define the target technical environment for the Odoo implementation:
+          
+          **Odoo Version and Edition**:
+          - Odoo Version: [e.g., 17.0, 18.0]
+          - Edition: Community or Enterprise
+          - Deployment Model: On-premise, Cloud, or Odoo.sh
+          - Update Strategy: LTS (Long Term Support) vs. Latest version
+          
+          **Infrastructure Architecture**:
+          - Deployment framework (e.g., Doodba, native Docker, bare metal)
+          - Database: PostgreSQL version and configuration
+          - Web server: Nginx, Apache, or integrated server
+          - Caching: Redis configuration for sessions and cache
+          - File storage: Local, S3, or other cloud storage
+          
+          **Environment Strategy**:
+          - Development environment setup
+          - Testing/staging environment requirements
+          - Production environment specifications
+          - Backup and disaster recovery approach
+        elicit: true
+
+      - id: existing-system-analysis
+        title: Existing System Analysis
+        instruction: |
+          Analyze the current system landscape and its impact on the architecture:
+          
+          **Current State Assessment**:
+          - Existing systems that will be replaced by Odoo
+          - Systems that will remain and need integration
+          - Data sources and their quality/accessibility
+          - Current infrastructure that can be leveraged
+          
+          **Migration Considerations**:
+          - Data migration complexity and approach
+          - Coexistence requirements during transition
+          - User migration and training implications
+          - Timeline constraints and dependencies
+          
+          **Integration Requirements**:
+          - Systems that must integrate with Odoo
+          - Integration patterns (real-time, batch, event-driven)
+          - Authentication and security requirements
+          - Data synchronization requirements
+        elicit: true
+
+  - id: odoo-module-architecture
+    title: Odoo Module Architecture
+    instruction: |
+      Design the Odoo module structure and relationships for this implementation.
+    sections:
+      - id: standard-modules
+        title: Standard Odoo Modules
+        instruction: |
+          Identify and configure standard Odoo modules for this implementation:
+          
+          **Core Modules** (typically required):
+          - [ ] **base**: Core Odoo functionality
+          - [ ] **web**: Web client interface
+          - [ ] **mail**: Messaging and activity tracking
+          
+          **Business Modules** (select based on requirements):
+          - [ ] **contacts**: Partner/customer management
+          - [ ] **crm**: Customer relationship management
+          - [ ] **sale**: Sales management (quotations, orders)
+          - [ ] **purchase**: Purchase management (RFQs, orders)
+          - [ ] **stock**: Inventory and warehouse management
+          - [ ] **mrp**: Manufacturing resource planning
+          - [ ] **account**: Accounting and financial management
+          - [ ] **hr**: Human resources management
+          - [ ] **project**: Project management and timesheets
+          - [ ] **website**: Website builder and content management
+          - [ ] **point_of_sale**: Point of sale operations
+          
+          **For each selected module, specify**:
+          - Business justification for inclusion
+          - Key features that will be used
+          - Configuration approach
+          - Integration points with other modules
+          - Customization requirements (if any)
+        elicit: true
+
+      - id: community-modules
+        title: OCA Community Modules
+        instruction: |
+          Identify OCA (Odoo Community Association) modules that provide additional functionality:
+          
+          **Module Selection Process**:
+          1. **Business Need**: What gap does this module fill?
+          2. **Module Maturity**: Check OCA maturity level and maintenance status
+          3. **Version Compatibility**: Ensure compatibility with target Odoo version
+          4. **Dependencies**: Understand module dependencies and conflicts
+          5. **Customization Needs**: Assess if further customization is required
+          
+          **Common OCA Module Categories**:
+          
+          **Accounting & Finance**:
+          - account_financial_report: Enhanced financial reporting
+          - account_payment_order: Payment order management
+          - account_reconcile_oca: Advanced reconciliation tools
+          
+          **Sales & Purchase**:
+          - sale_order_type: Sales order types and workflows
+          - purchase_request: Purchase request workflow
+          - agreement: Contract and agreement management
+          
+          **Inventory & Manufacturing**:
+          - stock_warehouse_calendar: Warehouse calendar management
+          - mrp_bom_structure_xlsx: BOM structure Excel reports
+          - quality_control: Quality control processes
+          
+          **HR & Payroll**:
+          - hr_timesheet_sheet: Timesheet validation workflows
+          - hr_expense_sequence: Expense report numbering
+          - hr_holidays_public: Public holiday management
+          
+          **Technical & Integration**:
+          - base_rest: REST API framework
+          - queue_job: Asynchronous job processing
+          - server_environment: Environment-based configuration
+          
+          **Documentation Requirements**:
+          For each selected OCA module, document:
+          - Module name and version
+          - Business functionality provided
+          - Configuration requirements
+          - Dependencies on other modules
+          - Maintenance and update strategy
+        elicit: true
+
+      - id: custom-modules
+        title: Custom Module Design
+        instruction: |
+          Design custom modules for business requirements not met by standard/community modules:
+          
+          **Custom Module Planning**:
+          
+          **Module Design Principles**:
+          - Single Responsibility: Each module should have a focused purpose
+          - Loose Coupling: Minimize dependencies between custom modules
+          - High Cohesion: Related functionality should be in the same module
+          - Inheritance Over Modification: Extend rather than modify existing models
+          - OCA Compliance: Follow OCA development guidelines
+          
+          **Module Structure Template**:
+          ```
+          custom_module_name/
+          ├── __init__.py
+          ├── __manifest__.py          # Module metadata and dependencies
+          ├── models/                  # Business logic and data models
+          │   ├── __init__.py
+          │   └── model_name.py
+          ├── views/                   # User interface definitions
+          │   ├── model_views.xml
+          │   └── menu_items.xml
+          ├── security/                # Access control and permissions
+          │   ├── ir.model.access.csv
+          │   └── security.xml
+          ├── data/                    # Master data and configuration
+          │   └── initial_data.xml
+          ├── demo/                    # Demo data for testing
+          │   └── demo_data.xml
+          ├── static/                  # Web assets (CSS, JS, images)
+          │   └── description/
+          │       └── icon.png
+          ├── tests/                   # Unit and integration tests
+          │   ├── __init__.py
+          │   └── test_model.py
+          └── README.rst               # Module documentation
+          ```
+          
+          **For Each Custom Module, Specify**:
+          1. **Module Name**: Following Odoo naming conventions
+          2. **Business Purpose**: What business need it addresses
+          3. **Data Models**: New models and extensions to existing models
+          4. **User Interface**: Views, menus, and user interactions
+          5. **Business Logic**: Workflows, validations, and calculations
+          6. **Integration Points**: How it connects with other modules
+          7. **Security Model**: User groups and access permissions
+          8. **Testing Strategy**: Unit tests and validation procedures
+        elicit: true
+
+  - id: data-architecture
+    title: Data Architecture
+    instruction: |
+      Design the data model and data management approach for the Odoo implementation.
+    sections:
+      - id: data-model-design
+        title: Data Model Design
+        instruction: |
+          Design the data model extending Odoo's standard data structure:
+          
+          **Core Entity Relationships**:
+          
+          **Partner Management**:
+          - res.partner: Customers, suppliers, employees
+          - res.partner.category: Partner categorization
+          - res.country, res.country.state: Geographic data
+          
+          **Product Management**:
+          - product.template: Product definitions
+          - product.product: Product variants
+          - product.category: Product categorization
+          - product.attribute: Variant attributes
+          
+          **Transaction Entities**:
+          - sale.order: Sales transactions
+          - purchase.order: Purchase transactions
+          - account.move: Accounting entries
+          - stock.picking: Inventory movements
+          
+          **Custom Data Model Extensions**:
+          For each custom field or model, specify:
+          
+          1. **Model Extension** (adding fields to existing models):
+          ```python
+          class ResPartnerExtension(models.Model):
+              _inherit = 'res.partner'
+              
+              custom_field = fields.Char('Custom Field')
+              special_category = fields.Selection([...])
+          ```
+          
+          2. **New Custom Models**:
+          ```python
+          class CustomModel(models.Model):
+              _name = 'custom.model'
+              _description = 'Custom Business Entity'
+              
+              name = fields.Char(required=True)
+              partner_id = fields.Many2one('res.partner')
+          ```
+          
+          **Data Relationships**:
+          - Document parent-child relationships
+          - Many-to-many relationship tables
+          - Computed field dependencies
+          - Constraint and validation rules
+        elicit: true
+
+      - id: data-migration
+        title: Data Migration Strategy
+        instruction: |
+          Plan the approach for migrating data from existing systems to Odoo:
+          
+          **Migration Assessment**:
+          
+          **Source System Analysis**:
+          - Current system databases and file formats
+          - Data volume estimates (number of records per entity)
+          - Data quality assessment (completeness, accuracy, consistency)
+          - Historical data retention requirements
+          
+          **Migration Approach**:
+          
+          1. **Big Bang Migration**:
+             - All data migrated during go-live weekend
+             - Single cutover point
+             - Suitable for: Smaller datasets, simple structures
+          
+          2. **Phased Migration**:
+             - Master data first, then transactional data
+             - Multiple migration events
+             - Suitable for: Large datasets, complex relationships
+          
+          3. **Parallel Run**:
+             - New system populated while old system continues
+             - Gradual transition with data synchronization
+             - Suitable for: Mission-critical systems
+          
+          **Migration Technical Approach**:
+          
+          **Data Extraction**:
+          - Export mechanisms from source systems
+          - Data transformation requirements
+          - Data cleansing and validation rules
+          
+          **Odoo Import Methods**:
+          - CSV import for simple data structures
+          - XML data files for complex relationships
+          - Python scripts for complex business logic
+          - API-based imports for real-time data
+          
+          **Migration Testing**:
+          - Test migration scripts with sample data
+          - Validate data integrity and relationships
+          - Performance testing with full data volumes
+          - Rollback procedures and contingency plans
+          
+          **Migration Sequence**:
+          1. Reference data (countries, currencies, units of measure)
+          2. Master data (partners, products, accounts)
+          3. Configuration data (price lists, payment terms)
+          4. Historical transactions (orders, invoices, payments)
+          5. Open transactions (pending orders, outstanding invoices)
+        elicit: true
+
+      - id: data-security
+        title: Data Security and Access Control
+        instruction: |
+          Design security architecture for data protection and access control:
+          
+          **Odoo Security Model**:
+          
+          **User Groups and Roles**:
+          - Define business-oriented user groups
+          - Map groups to Odoo security groups
+          - Plan group hierarchies and inheritance
+          
+          **Access Rights (CRUD Permissions)**:
+          - Model-level access control (Create, Read, Update, Delete)
+          - Menu and action visibility
+          - Field-level access restrictions
+          
+          **Record Rules (Row-Level Security)**:
+          - Company-based access (multi-company setups)
+          - Department-based access restrictions
+          - User-based record ownership
+          - Dynamic access based on record state
+          
+          **Example Security Implementation**:
+          ```xml
+          <!-- User Groups -->
+          <record model="res.groups" id="group_sales_user">
+              <field name="name">Sales User</field>
+              <field name="category_id" ref="base.module_category_sales"/>
+          </record>
+          
+          <!-- Access Rights -->
+          <record model="ir.model.access" id="access_sale_order_user">
+              <field name="model_id" ref="model_sale_order"/>
+              <field name="group_id" ref="group_sales_user"/>
+              <field name="perm_read" eval="1"/>
+              <field name="perm_write" eval="1"/>
+              <field name="perm_create" eval="1"/>
+              <field name="perm_unlink" eval="0"/>
+          </record>
+          
+          <!-- Record Rules -->
+          <record model="ir.rule" id="sale_order_user_rule">
+              <field name="name">Sales Order: User Access</field>
+              <field name="model_id" ref="model_sale_order"/>
+              <field name="domain_force">[('user_id','=',user.id)]</field>
+              <field name="groups" eval="[(4,ref('group_sales_user'))]"/>
+          </record>
+          ```
+          
+          **Data Protection Measures**:
+          - Personal data handling (GDPR compliance)
+          - Data encryption at rest and in transit
+          - Audit logging and activity tracking
+          - Backup security and access controls
+          - Database connection security
+        elicit: true
+
+  - id: integration-architecture
+    title: Integration Architecture
+    instruction: |
+      Design the integration approach for connecting Odoo with external systems.
+    sections:
+      - id: integration-patterns
+        title: Integration Patterns
+        instruction: |
+          Define integration patterns and approaches for external system connectivity:
+          
+          **Integration Pattern Selection**:
+          
+          **1. Real-Time Integration (Synchronous)**:
+          - **Use Cases**: Payment processing, inventory checks, pricing
+          - **Technologies**: REST APIs, XML-RPC, JSON-RPC
+          - **Pros**: Immediate data consistency, real-time validation
+          - **Cons**: Higher complexity, dependency on external system availability
+          
+          **2. Near Real-Time Integration (Asynchronous)**:
+          - **Use Cases**: Order processing, customer updates, notifications
+          - **Technologies**: Message queues, webhooks, event-driven architecture
+          - **Pros**: Better fault tolerance, system decoupling
+          - **Cons**: Eventual consistency, more complex error handling
+          
+          **3. Batch Integration (Scheduled)**:
+          - **Use Cases**: Daily reports, bulk data updates, archival
+          - **Technologies**: Scheduled jobs, file transfers, ETL processes
+          - **Pros**: Simple to implement, efficient for large volumes
+          - **Cons**: Data latency, potential batch failure impact
+          
+          **Integration Architecture Components**:
+          
+          **API Gateway/Middleware**:
+          - Centralized API management
+          - Authentication and authorization
+          - Rate limiting and throttling
+          - Request/response transformation
+          - Logging and monitoring
+          
+          **Message Queue System**:
+          - Asynchronous message processing
+          - Error handling and retry mechanisms
+          - Dead letter queues for failed messages
+          - Message persistence and durability
+          
+          **Data Transformation Layer**:
+          - Data format conversion (JSON, XML, CSV)
+          - Field mapping and transformation
+          - Data validation and cleansing
+          - Business rule application
+        elicit: true
+
+      - id: specific-integrations
+        title: Specific Integration Designs
+        instruction: |
+          Design specific integrations based on the requirements identified in the PRD:
+          
+          **For Each Integration, Specify**:
+          
+          **Integration Details**:
+          1. **External System**: Name, version, and vendor
+          2. **Business Purpose**: Why this integration is needed
+          3. **Data Flow**: What data moves in which direction
+          4. **Integration Pattern**: Real-time, batch, or event-driven
+          5. **Technical Method**: API, file transfer, database connection
+          6. **Frequency**: How often data is synchronized
+          7. **Volume**: Expected data volumes and growth
+          8. **Error Handling**: How failures are detected and resolved
+          
+          **Common Odoo Integration Examples**:
+          
+          **eCommerce Integration**:
+          ```python
+          # Example: Magento/Shopify to Odoo
+          Integration: eCommerce Platform → Odoo
+          Data Flow: 
+            - Products: Odoo → eCommerce (master data)
+            - Orders: eCommerce → Odoo (transactions)
+            - Inventory: Odoo → eCommerce (stock levels)
+            - Customers: Bidirectional sync
+          Method: REST API with webhooks
+          Frequency: Real-time for orders, hourly for inventory
+          ```
+          
+          **Payment Gateway Integration**:
+          ```python
+          # Example: Stripe/PayPal Integration
+          Integration: Payment Gateway ↔ Odoo
+          Data Flow:
+            - Payment requests: Odoo → Gateway
+            - Payment confirmations: Gateway → Odoo
+            - Refunds: Bidirectional
+          Method: REST API
+          Frequency: Real-time
+          Security: Tokenization for card data
+          ```
+          
+          **Shipping Carrier Integration**:
+          ```python
+          # Example: FedEx/UPS Integration
+          Integration: Shipping Carrier ↔ Odoo
+          Data Flow:
+            - Shipping rates: Carrier → Odoo
+            - Label generation: Odoo → Carrier
+            - Tracking updates: Carrier → Odoo
+          Method: SOAP/REST API
+          Frequency: Real-time for rates, batch for tracking
+          ```
+          
+          **Banking Integration**:
+          ```python
+          # Example: Bank Statement Import
+          Integration: Bank → Odoo
+          Data Flow:
+            - Bank statements: Bank → Odoo
+            - Payment confirmations: Bank → Odoo
+          Method: File import (OFX, CSV) or API
+          Frequency: Daily batch processing
+          ```
+        elicit: true
+
+      - id: api-design
+        title: API Design and Security
+        instruction: |
+          Design APIs for external systems to integrate with Odoo:
+          
+          **Odoo API Capabilities**:
+          
+          **1. XML-RPC API**:
+          - Standard Odoo API for all operations
+          - Supports authentication and session management
+          - Full CRUD operations on all models
+          - Suitable for: System integrations, data imports
+          
+          **2. JSON-RPC API**:
+          - Web-based API for JavaScript clients
+          - Session-based authentication
+          - Same functionality as XML-RPC with JSON format
+          - Suitable for: Web applications, mobile apps
+          
+          **3. REST API (via OCA modules)**:
+          - RESTful endpoints for modern integrations
+          - Token-based authentication
+          - Standardized HTTP methods and status codes
+          - Suitable for: Modern web services, microservices
+          
+          **API Security Architecture**:
+          
+          **Authentication Methods**:
+          - Basic authentication (username/password)
+          - API keys for system-to-system integration
+          - OAuth 2.0 for third-party applications
+          - JWT tokens for stateless authentication
+          
+          **Authorization and Access Control**:
+          - Role-based access control (RBAC)
+          - API endpoint access restrictions
+          - Rate limiting and throttling
+          - IP address whitelisting
+          
+          **API Security Best Practices**:
+          - HTTPS encryption for all API communications
+          - Input validation and sanitization
+          - SQL injection prevention
+          - API versioning strategy
+          - Comprehensive logging and monitoring
+          
+          **Example API Implementation**:
+          ```python
+          # Custom REST API endpoint
+          from odoo import http
+          from odoo.http import request
+          
+          class CustomAPI(http.Controller):
+              
+              @http.route('/api/v1/customers', auth='api_key', 
+                         methods=['GET'], csrf=False)
+              def get_customers(self, **kwargs):
+                  customers = request.env['res.partner'].search([
+                      ('is_company', '=', False)
+                  ])
+                  return {
+                      'customers': [{
+                          'id': c.id,
+                          'name': c.name,
+                          'email': c.email
+                      } for c in customers]
+                  }
+          ```
+        elicit: true
+
+  - id: performance-scalability
+    title: Performance and Scalability
+    instruction: |
+      Design performance optimization and scalability strategies for the Odoo implementation.
+    sections:
+      - id: performance-requirements
+        title: Performance Requirements
+        instruction: |
+          Define performance requirements and optimization strategies:
+          
+          **Performance Metrics and Targets**:
+          
+          **Response Time Requirements**:
+          - Page load time: < 2 seconds for standard operations
+          - Report generation: < 30 seconds for standard reports
+          - API response time: < 500ms for simple queries
+          - Search operations: < 1 second for typical searches
+          
+          **Throughput Requirements**:
+          - Concurrent users: Support for X simultaneous users
+          - Transaction volume: X transactions per hour/day
+          - API calls: X requests per minute/hour
+          - Batch processing: X records per hour
+          
+          **System Resources**:
+          - CPU utilization: < 70% under normal load
+          - Memory usage: < 80% of available RAM
+          - Database size: Current size + 3-year growth projection
+          - Storage I/O: Adequate IOPS for database operations
+          
+          **Performance Optimization Strategies**:
+          
+          **Database Optimization**:
+          - Proper indexing strategy for frequently queried fields
+          - Database connection pooling and optimization
+          - Query optimization and avoiding N+1 problems
+          - Database partitioning for large tables
+          - Regular maintenance (VACUUM, ANALYZE)
+          
+          **Application Optimization**:
+          - Efficient search domains and filters
+          - Proper use of computed fields vs. stored fields
+          - Caching strategies for expensive operations
+          - Batch processing for bulk operations
+          - Proper ORM usage patterns
+          
+          **Infrastructure Optimization**:
+          - Load balancing for high availability
+          - CDN for static assets
+          - Redis caching for sessions and temporary data
+          - Proper server sizing and resource allocation
+        elicit: true
+
+      - id: scalability-planning
+        title: Scalability Planning
+        instruction: |
+          Plan for system scalability to handle growth over time:
+          
+          **Scaling Dimensions**:
+          
+          **User Scaling**:
+          - Current users: X users
+          - 1-year projection: X users
+          - 3-year projection: X users
+          - Peak concurrent usage patterns
+          
+          **Data Scaling**:
+          - Current database size: X GB
+          - Annual growth rate: X% or X GB/year
+          - Transaction volume growth
+          - Integration data volume growth
+          
+          **Geographic Scaling**:
+          - Current locations: Single/Multiple sites
+          - Expansion plans: New offices/countries
+          - Multi-company requirements
+          - Localization needs (languages, currencies, regulations)
+          
+          **Scalability Architecture Options**:
+          
+          **Vertical Scaling (Scale Up)**:
+          - Increase server resources (CPU, RAM, storage)
+          - Upgrade database server specifications
+          - Optimize single-instance performance
+          - Suitable for: Moderate growth, simpler architecture
+          
+          **Horizontal Scaling (Scale Out)**:
+          - Multiple Odoo instances with load balancing
+          - Database clustering and replication
+          - Microservices architecture for specific functions
+          - Suitable for: High growth, geographic distribution
+          
+          **Hybrid Scaling**:
+          - Combination of vertical and horizontal scaling
+          - Different scaling strategies for different components
+          - Cloud-based auto-scaling capabilities
+          - Suitable for: Variable load patterns, cost optimization
+          
+          **Scalability Implementation Plan**:
+          
+          **Phase 1: Foundation** (0-12 months):
+          - Single instance with optimized configuration
+          - Proper monitoring and performance baseline
+          - Database optimization and indexing
+          - Caching implementation
+          
+          **Phase 2: Optimization** (12-24 months):
+          - Load balancing implementation
+          - Database performance tuning
+          - API optimization and caching
+          - Integration performance optimization
+          
+          **Phase 3: Scaling** (24+ months):
+          - Multi-instance deployment
+          - Geographic distribution if needed
+          - Advanced caching and CDN implementation
+          - Microservices extraction if applicable
+        elicit: true
+
+  - id: deployment-architecture
+    title: Deployment Architecture
+    instruction: |
+      Design the deployment strategy and infrastructure architecture.
+    sections:
+      - id: deployment-strategy
+        title: Deployment Strategy
+        instruction: |
+          Define the deployment approach and infrastructure setup:
+          
+          **Deployment Framework Selection**:
+          
+          **Doodba Framework** (Recommended for most cases):
+          - Docker-based deployment with best practices
+          - Standardized project structure and workflows
+          - Built-in development and production configurations
+          - Integrated testing and quality assurance tools
+          - Community support and documentation
+          
+          **Alternative Deployment Options**:
+          - Native Docker containers (custom setup)
+          - Bare metal installation (traditional approach)
+          - Odoo.sh (Odoo's managed cloud platform)
+          - Third-party cloud services (AWS, Google Cloud, Azure)
+          
+          **Environment Architecture**:
+          
+          **Development Environment**:
+          ```yaml
+          # docker-compose.yml for development
+          services:
+            odoo:
+              build: ./odoo
+              ports: ["8069:8069"]
+              volumes: 
+                - ./odoo/custom:/opt/odoo/custom
+                - ./odoo/auto:/opt/odoo/auto:ro
+              environment:
+                - PGHOST=db
+                - LOG_LEVEL=debug
+            db:
+              image: postgres:15
+              environment:
+                - POSTGRES_DB=odoo
+                - POSTGRES_USER=odoo
+                - POSTGRES_PASSWORD=odoo
+          ```
+          
+          **Testing/Staging Environment**:
+          - Mirror production configuration
+          - Automated deployment from development
+          - Test data management and refresh procedures
+          - Performance testing capabilities
+          
+          **Production Environment**:
+          ```yaml
+          # Production configuration example
+          services:
+            odoo:
+              image: production-odoo-image:latest
+              restart: unless-stopped
+              environment:
+                - WORKERS=8
+                - MAX_CRON_THREADS=2
+                - PROXY_MODE=1
+              deploy:
+                resources:
+                  limits:
+                    cpus: '4.0'
+                    memory: 8G
+            nginx:
+              image: nginx:alpine
+              ports: ["80:80", "443:443"]
+              volumes:
+                - ./nginx/ssl:/etc/nginx/ssl
+            db:
+              image: postgres:15
+              volumes:
+                - db-data:/var/lib/postgresql/data
+              environment:
+                - POSTGRES_SHARED_PRELOAD_LIBRARIES=pg_stat_statements
+          ```
+        elicit: true
+
+      - id: infrastructure-requirements
+        title: Infrastructure Requirements
+        instruction: |
+          Specify detailed infrastructure requirements for each environment:
+          
+          **Hardware Requirements**:
+          
+          **Development Environment**:
+          - CPU: 2-4 cores
+          - RAM: 8-16 GB
+          - Storage: 100-200 GB SSD
+          - Network: Standard broadband
+          
+          **Production Environment**:
+          - CPU: 8-16 cores (depending on user count)
+          - RAM: 16-64 GB (4-8 GB per 100 users)
+          - Storage: 500+ GB SSD (database + filestore)
+          - Network: High-speed internet with redundancy
+          
+          **Database Server Requirements**:
+          - CPU: Dedicated cores for database operations
+          - RAM: Large amount for database caching
+          - Storage: Fast SSD with high IOPS
+          - Backup: Separate storage for database backups
+          
+          **Network Architecture**:
+          
+          **Security Zones**:
+          - DMZ: Web servers and load balancers
+          - Application Zone: Odoo application servers
+          - Database Zone: Database servers (restricted access)
+          - Management Zone: Monitoring and backup systems
+          
+          **Network Components**:
+          - Load balancer for high availability
+          - Firewall for security protection
+          - VPN for secure remote access
+          - DNS and certificate management
+          
+          **Monitoring and Logging**:
+          
+          **System Monitoring**:
+          - Server resource monitoring (CPU, RAM, disk, network)
+          - Database performance monitoring
+          - Application performance monitoring
+          - User experience monitoring
+          
+          **Log Management**:
+          - Centralized log collection and analysis
+          - Security event logging and alerting
+          - Application error tracking
+          - Audit trail management
+          
+          **Backup and Disaster Recovery**:
+          
+          **Backup Strategy**:
+          - Daily database backups with retention policy
+          - File system backups (custom modules, configurations)
+          - Offsite backup storage for disaster recovery
+          - Backup verification and restoration testing
+          
+          **Disaster Recovery Plan**:
+          - Recovery Time Objective (RTO): Maximum downtime
+          - Recovery Point Objective (RPO): Maximum data loss
+          - Disaster recovery procedures and runbooks
+          - Regular disaster recovery testing
+        elicit: true
+
+  - id: security-architecture
+    title: Security Architecture
+    instruction: |
+      Design comprehensive security measures for the Odoo implementation.
+    sections:
+      - id: security-framework
+        title: Security Framework
+        instruction: |
+          Define the overall security framework and approach:
+          
+          **Security Principles**:
+          - Defense in depth (multiple security layers)
+          - Principle of least privilege (minimal access rights)
+          - Fail-safe defaults (secure by default configuration)
+          - Complete mediation (all access requests validated)
+          - Security through diversity (multiple security mechanisms)
+          
+          **Security Domains**:
+          
+          **Network Security**:
+          - Firewall configuration and rules
+          - Network segmentation and VLANs
+          - VPN for secure remote access
+          - DDoS protection and mitigation
+          - Intrusion detection and prevention
+          
+          **Application Security**:
+          - Secure coding practices
+          - Input validation and sanitization
+          - SQL injection prevention
+          - Cross-site scripting (XSS) protection
+          - Authentication and session management
+          
+          **Data Security**:
+          - Data encryption at rest and in transit
+          - Database access controls
+          - Personal data protection (GDPR compliance)
+          - Data backup encryption
+          - Secure data disposal
+          
+          **Access Control Security**:
+          - Multi-factor authentication (MFA)
+          - Role-based access control (RBAC)
+          - Regular access reviews and audits
+          - Account lockout and password policies
+          - Privileged account management
+        elicit: true
+
+      - id: compliance-requirements
+        title: Compliance Requirements
+        instruction: |
+          Address regulatory and compliance requirements:
+          
+          **Regulatory Compliance**:
+          
+          **GDPR (General Data Protection Regulation)**:
+          - Personal data identification and classification
+          - Data subject rights implementation
+          - Privacy by design principles
+          - Data breach notification procedures
+          - Data protection officer designation
+          
+          **SOX (Sarbanes-Oxley) - if applicable**:
+          - Financial data controls
+          - Audit trail requirements
+          - Change management controls
+          - User access controls for financial data
+          - Regular compliance assessments
+          
+          **Industry-Specific Regulations**:
+          - Healthcare: HIPAA compliance
+          - Financial: PCI DSS compliance
+          - Manufacturing: FDA regulations
+          - Other: Industry-specific requirements
+          
+          **Compliance Implementation**:
+          
+          **Audit Trail and Logging**:
+          - User activity logging
+          - Data access and modification tracking
+          - System change logging
+          - Regular audit report generation
+          - Log retention and archival
+          
+          **Data Governance**:
+          - Data classification and handling procedures
+          - Data retention and disposal policies
+          - Data quality and integrity controls
+          - Regular compliance monitoring
+          - Incident response procedures
+        elicit: true
+
+  - id: testing-strategy
+    title: Testing Strategy
+    instruction: |
+      Define comprehensive testing approach for the Odoo implementation.
+    sections:
+      - id: testing-framework
+        title: Testing Framework
+        instruction: |
+          Design the testing strategy and framework:
+          
+          **Testing Levels**:
+          
+          **Unit Testing**:
+          - Individual module and function testing
+          - Automated test suites for custom code
+          - Test-driven development approach
+          - Code coverage requirements (80%+ for custom code)
+          
+          **Integration Testing**:
+          - Module integration testing
+          - API integration testing
+          - Database integration testing
+          - External system integration testing
+          
+          **System Testing**:
+          - End-to-end business process testing
+          - Performance and load testing
+          - Security and penetration testing
+          - Usability and user experience testing
+          
+          **Acceptance Testing**:
+          - User acceptance testing (UAT)
+          - Business process validation
+          - Regression testing for existing functionality
+          - Go-live readiness testing
+          
+          **Testing Environments**:
+          
+          **Development Testing**:
+          - Unit tests run on developer machines
+          - Continuous integration testing
+          - Basic functionality validation
+          - Code quality checks
+          
+          **Integration Testing Environment**:
+          - Full system integration testing
+          - API and external system testing
+          - Performance baseline testing
+          - Security vulnerability scanning
+          
+          **User Acceptance Testing Environment**:
+          - Production-like environment for UAT
+          - Business user testing and validation
+          - Training and documentation validation
+          - Go-live rehearsal testing
+        elicit: true
+
+      - id: testing-procedures
+        title: Testing Procedures
+        instruction: |
+          Define specific testing procedures and protocols:
+          
+          **Automated Testing**:
+          
+          **Continuous Integration Pipeline**:
+          ```yaml
+          # Example CI/CD pipeline for Odoo
+          stages:
+            - lint: Code quality checks (flake8, pylint-odoo)
+            - test: Unit and integration tests
+            - build: Docker image building
+            - deploy-staging: Staging deployment
+            - test-integration: Integration test suite
+            - deploy-production: Production deployment (manual)
+          ```
+          
+          **Test Data Management**:
+          - Test data creation and maintenance
+          - Production data anonymization for testing
+          - Test data refresh procedures
+          - Data-driven testing approaches
+          
+          **Performance Testing**:
+          
+          **Load Testing Scenarios**:
+          - Normal load: Expected daily usage patterns
+          - Peak load: Maximum expected concurrent users
+          - Stress testing: Beyond normal capacity
+          - Endurance testing: Extended usage periods
+          
+          **Performance Metrics**:
+          - Response time measurements
+          - Throughput and concurrent user capacity
+          - System resource utilization
+          - Database performance metrics
+          
+          **Security Testing**:
+          
+          **Vulnerability Assessment**:
+          - Automated security scanning
+          - Manual penetration testing
+          - Code security review
+          - Configuration security audit
+          
+          **User Acceptance Testing**:
+          
+          **UAT Planning**:
+          - Test scenario development
+          - User training and preparation
+          - Testing environment setup
+          - Issue tracking and resolution
+          
+          **Go-Live Testing**:
+          - Production deployment testing
+          - Smoke testing procedures
+          - Rollback testing and procedures
+          - Post-deployment validation
+        elicit: true
+
+  - id: maintenance-support
+    title: Maintenance and Support
+    instruction: |
+      Plan ongoing maintenance and support for the Odoo implementation.
+    sections:
+      - id: maintenance-strategy
+        title: Maintenance Strategy
+        instruction: |
+          Define ongoing maintenance approach and procedures:
+          
+          **Maintenance Categories**:
+          
+          **Preventive Maintenance**:
+          - Regular system health checks
+          - Database maintenance and optimization
+          - Security patch management
+          - Performance monitoring and tuning
+          - Backup verification and testing
+          
+          **Corrective Maintenance**:
+          - Bug fixes and issue resolution
+          - Data correction and cleanup
+          - Integration problem resolution
+          - User training and support
+          
+          **Adaptive Maintenance**:
+          - Odoo version upgrades
+          - New feature implementation
+          - Integration updates and changes
+          - Regulatory compliance updates
+          
+          **Perfective Maintenance**:
+          - Performance optimization
+          - User experience improvements
+          - Process optimization
+          - Capacity planning and scaling
+          
+          **Maintenance Procedures**:
+          
+          **Regular Maintenance Tasks**:
+          - Daily: System monitoring and backup verification
+          - Weekly: Performance review and log analysis
+          - Monthly: Security updates and patch management
+          - Quarterly: Capacity planning and performance optimization
+          - Annually: Disaster recovery testing and documentation updates
+          
+          **Change Management Process**:
+          - Change request evaluation and approval
+          - Impact assessment and risk analysis
+          - Testing and validation procedures
+          - Deployment planning and execution
+          - Post-deployment monitoring and validation
+        elicit: true
+
+      - id: support-model
+        title: Support Model
+        instruction: |
+          Define the support structure and service level agreements:
+          
+          **Support Tiers**:
+          
+          **Tier 1 Support (Help Desk)**:
+          - User questions and basic troubleshooting
+          - Password resets and access issues
+          - Basic configuration assistance
+          - Incident logging and initial triage
+          
+          **Tier 2 Support (Technical Support)**:
+          - Advanced troubleshooting and problem resolution
+          - System configuration and customization
+          - Integration issues and API problems
+          - Performance issues and optimization
+          
+          **Tier 3 Support (Development Support)**:
+          - Custom module development and fixes
+          - Complex integration development
+          - Database issues and optimization
+          - Architecture changes and enhancements
+          
+          **Service Level Agreements (SLAs)**:
+          
+          **Response Time SLAs**:
+          - Critical (system down): 1 hour response, 4 hour resolution
+          - High (major functionality impacted): 4 hour response, 24 hour resolution
+          - Medium (minor functionality impacted): 1 business day response, 3 business day resolution
+          - Low (general questions): 2 business day response, 5 business day resolution
+          
+          **Availability SLAs**:
+          - System uptime: 99.9% availability during business hours
+          - Planned maintenance windows: Off-hours with advance notice
+          - Emergency maintenance: As needed with stakeholder notification
+          
+          **Support Channels**:
+          - Email support for non-urgent issues
+          - Phone support for urgent issues
+          - Online portal for ticket tracking
+          - Remote assistance for troubleshooting
+          
+          **Knowledge Management**:
+          - User documentation and training materials
+          - Technical documentation and runbooks
+          - FAQ and common issue resolution
+          - Best practices and guidelines
+        elicit: true
+
+  - id: conclusion
+    title: Conclusion and Next Steps
+    instruction: |
+      Summarize the architecture and define next steps for implementation.
+    sections:
+      - id: architecture-summary
+        title: Architecture Summary
+        instruction: |
+          Provide a comprehensive summary of the technical architecture:
+          
+          **Key Architecture Decisions**:
+          - Odoo version and edition selection rationale
+          - Deployment framework choice (Doodba/Docker)
+          - Integration approach and patterns
+          - Security framework and compliance approach
+          - Performance and scalability strategy
+          
+          **Technical Components**:
+          - Standard Odoo modules selected
+          - OCA community modules identified
+          - Custom modules designed
+          - Integration points defined
+          - Infrastructure requirements specified
+          
+          **Implementation Approach**:
+          - Development methodology and workflow
+          - Testing strategy and quality assurance
+          - Deployment and go-live approach
+          - Maintenance and support model
+          
+          **Risk Mitigation**:
+          - Technical risks identified and addressed
+          - Performance risks mitigated through design
+          - Security risks managed through framework
+          - Integration risks reduced through testing
+        elicit: true
+
+      - id: implementation-roadmap
+        title: Implementation Roadmap
+        instruction: |
+          Define the high-level roadmap for implementing this architecture:
+          
+          **Phase 1: Foundation Setup** (Weeks 1-4)
+          - Development environment setup
+          - Base Odoo installation and configuration
+          - Standard module installation and basic configuration
+          - Development team training and onboarding
+          
+          **Phase 2: Custom Development** (Weeks 5-8)
+          - Custom module development and testing
+          - OCA module installation and configuration
+          - Basic integration development
+          - Unit testing and quality assurance
+          
+          **Phase 3: Integration and Testing** (Weeks 9-12)
+          - External system integration development
+          - System integration testing
+          - Performance testing and optimization
+          - Security testing and hardening
+          
+          **Phase 4: User Acceptance and Go-Live** (Weeks 13-16)
+          - User acceptance testing environment setup
+          - Business user training and UAT execution
+          - Production environment preparation
+          - Go-live execution and support
+          
+          **Dependencies and Critical Path**:
+          - External system readiness for integration
+          - Data migration preparation and execution
+          - User training and change management
+          - Infrastructure provisioning and setup
+          
+          **Success Criteria**:
+          - All functional requirements implemented
+          - Performance targets met
+          - Security requirements satisfied
+          - User acceptance achieved
+          - Go-live successful with minimal issues
+        elicit: true

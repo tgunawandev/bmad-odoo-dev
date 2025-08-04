@@ -1,0 +1,35 @@
+name: bmad-method-odoo
+version: 1.0.0
+short-title: Odoo Development Pack
+description: >-
+  This expansion pack extends BMad Method with comprehensive Odoo development 
+  capabilities. It's designed for teams working with Odoo ERP systems, focusing 
+  on addon development, brownfield enhancements, Doodba deployments, and OCA 
+  community patterns. Perfect for businesses extending Odoo functionality.
+author: Tri Gunawan (Kodemeio), extending BMad-Method by Brian (BMad)
+slashPrefix: OdooMethod
+category: domain-specific
+domain: odoo-development
+framework: doodba
+community: oca
+
+# Odoo-specific configuration
+odoo:
+  supportedVersions: [13.0, 14.0, 15.0, 16.0, 17.0, 18.0]
+  deployment: doodba
+  community: oca
+  focus: brownfield
+  
+# Integration settings
+integration:
+  inheritsFrom: bmad-method
+  extendsCore: true
+  standalone: false
+  
+# File structure
+structure:
+  agents: agents/
+  tasks: tasks/
+  templates: templates/
+  data: data/
+  checklists: checklists/

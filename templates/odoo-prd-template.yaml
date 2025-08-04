@@ -1,0 +1,554 @@
+template:
+  id: odoo-prd-template-v1
+  name: Odoo Product Requirements Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/prd.md
+    title: "{{project_name}} - Product Requirements Document"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: Introduction
+    instruction: |
+      Before beginning, review any available project documentation to gather relevant context. 
+      Look for existing business process documentation, system architecture, or previous requirements.
+    sections:
+      - id: project-overview
+        title: Project Overview
+        instruction: |
+          Provide a comprehensive overview of the Odoo implementation or enhancement project:
+          
+          1. **Business Context**: What business need is driving this project?
+          2. **Current State**: What is the current system or process being replaced/enhanced?
+          3. **Desired Outcome**: What will success look like for the business?
+          4. **Scope Boundaries**: What is explicitly included and excluded from this project?
+          
+          Focus on business value and outcomes rather than technical details.
+        elicit: true
+
+      - id: stakeholders
+        title: Stakeholders
+        instruction: |
+          Identify all key stakeholders for this Odoo project:
+          
+          **Primary Stakeholders** (directly impacted):
+          - Business users who will use the system daily
+          - Department heads whose processes will change
+          - IT staff responsible for maintenance
+          
+          **Secondary Stakeholders** (indirectly impacted):
+          - Customers whose experience may change
+          - Suppliers whose interactions may change
+          - Compliance/audit teams
+          
+          For each stakeholder group, specify:
+          - Their role in the project
+          - Their key concerns or requirements
+          - Their success criteria
+        elicit: true
+
+      - id: success-criteria
+        title: Success Criteria
+        instruction: |
+          Define measurable success criteria for this Odoo project:
+          
+          **Business Metrics**:
+          - Process efficiency improvements (time savings, error reduction)
+          - Cost reductions or revenue increases
+          - User satisfaction and adoption rates
+          
+          **Technical Metrics**:
+          - System performance requirements
+          - Integration success criteria
+          - Data accuracy and completeness
+          
+          **Timeline Metrics**:
+          - Implementation milestones
+          - Go-live date and rollout schedule
+          - Training completion rates
+          
+          Each criterion should be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).
+        elicit: true
+
+  - id: business-requirements
+    title: Business Requirements
+    instruction: |
+      This section captures detailed business requirements organized by functional area.
+      Focus on WHAT the business needs, not HOW it will be implemented technically.
+    sections:
+      - id: functional-areas
+        title: Functional Areas
+        instruction: |
+          Identify the main Odoo functional areas that will be implemented or enhanced:
+          
+          **Standard Odoo Modules** (check all that apply):
+          - [ ] Sales & CRM (leads, opportunities, quotations, sales orders)
+          - [ ] Purchase (RFQs, purchase orders, vendor management)
+          - [ ] Inventory (stock management, warehousing, lot tracking)
+          - [ ] Manufacturing (BOM, work orders, quality control)
+          - [ ] Accounting (invoicing, payments, financial reporting)
+          - [ ] HR (employees, recruitment, timesheets, payroll)
+          - [ ] Project Management (tasks, timesheets, planning)
+          - [ ] Website/eCommerce (online catalog, shopping cart)
+          - [ ] Point of Sale (retail operations, payments)
+          - [ ] Marketing (campaigns, events, automation)
+          
+          **Custom Requirements**:
+          - Specific industry requirements not covered by standard modules
+          - Unique business processes requiring customization
+          - Special reporting or analytics needs
+          
+          For each area, provide:
+          - Current business process description
+          - Pain points with current approach
+          - Desired future state with Odoo
+        elicit: true
+
+      - id: business-processes
+        title: Business Processes
+        instruction: |
+          Document key business processes that will be supported by Odoo:
+          
+          **Process Documentation Format**:
+          For each major business process, provide:
+          
+          1. **Process Name**: Clear, descriptive name
+          2. **Process Owner**: Department/role responsible
+          3. **Frequency**: How often this process occurs
+          4. **Current State**: How it works today (including pain points)
+          5. **Future State**: How it should work with Odoo
+          6. **Key Data**: What information is captured/needed
+          7. **Integrations**: Other systems or processes that interact
+          8. **Compliance**: Any regulatory or audit requirements
+          
+          **Examples of Key Processes**:
+          - Lead to Cash (CRM → Sales → Fulfillment → Invoicing)
+          - Procure to Pay (Purchase → Receipt → Payment)
+          - Order to Delivery (Manufacturing/Fulfillment process)
+          - Hire to Retire (HR lifecycle management)
+          - Financial Close (Accounting period close process)
+          
+          Focus on end-to-end processes that cross multiple Odoo modules.
+        elicit: true
+
+      - id: user-roles
+        title: User Roles and Permissions
+        instruction: |
+          Define user roles and their access requirements:
+          
+          **Role Definition Format**:
+          For each user role, specify:
+          
+          1. **Role Name**: Clear, business-oriented role name
+          2. **Department**: Which business department
+          3. **User Count**: Estimated number of users in this role
+          4. **Primary Functions**: What they do in the system daily
+          5. **Data Access**: What data they need to see/modify
+          6. **Approval Authority**: What they can approve (with limits)
+          7. **Reports Needed**: Standard and custom reports they require
+          
+          **Common Odoo Role Examples**:
+          - Sales Representative (leads, opportunities, quotations)
+          - Sales Manager (team oversight, approvals, forecasting)
+          - Purchase Officer (RFQs, purchase orders, vendor management)
+          - Warehouse Operator (receiving, picking, shipping)
+          - Accountant (invoicing, payments, reconciliation)
+          - Finance Manager (financial reporting, approvals)
+          - HR Generalist (employee records, recruitment)
+          - Project Manager (projects, tasks, resource allocation)
+          
+          Consider both day-to-day access and periodic/seasonal needs.
+        elicit: true
+
+      - id: data-requirements
+        title: Data Requirements
+        instruction: |
+          Specify data requirements for the Odoo implementation:
+          
+          **Master Data Requirements**:
+          - Customer/Partner data (contacts, addresses, payment terms)
+          - Product/Service catalog (descriptions, pricing, categories)
+          - Vendor/Supplier information (contacts, terms, capabilities)
+          - Chart of Accounts (accounting structure, tax codes)
+          - Employee data (roles, departments, compensation)
+          
+          **Transactional Data**:
+          - Historical data to migrate (how far back?)
+          - Transaction volumes (daily/monthly/yearly)
+          - Peak usage periods and seasonal variations
+          - Data retention requirements
+          
+          **Data Quality Requirements**:
+          - Accuracy standards (acceptable error rates)
+          - Completeness requirements (mandatory fields)
+          - Consistency rules (validation requirements)
+          - Timeliness needs (real-time vs. batch updates)
+          
+          **Data Sources**:
+          - Current systems containing relevant data
+          - Data export/import capabilities
+          - Data cleansing requirements
+          - Master data management approach
+        elicit: true
+
+  - id: integration-requirements
+    title: Integration Requirements
+    instruction: |
+      Document all integration requirements for the Odoo system.
+    sections:
+      - id: external-systems
+        title: External System Integrations
+        instruction: |
+          Identify all external systems that need to integrate with Odoo:
+          
+          **Integration Inventory**:
+          For each external system, document:
+          
+          1. **System Name**: Name and version of external system
+          2. **System Type**: CRM, ERP, eCommerce, etc.
+          3. **Business Purpose**: Why integration is needed
+          4. **Data Flow**: What data moves in which direction
+          5. **Frequency**: Real-time, hourly, daily, etc.
+          6. **Volume**: Estimated record volumes
+          7. **Integration Method**: API, file transfer, database connection
+          8. **Authentication**: Security requirements
+          9. **Error Handling**: How failures should be managed
+          
+          **Common Integration Types**:
+          - Banking systems (payment processing, reconciliation)
+          - eCommerce platforms (orders, inventory, customers)
+          - Shipping carriers (rates, tracking, labels)
+          - Tax services (tax calculation, compliance)
+          - Payment gateways (credit card processing)
+          - Business intelligence tools (reporting, analytics)
+          - Legacy systems (data migration, coexistence)
+          
+          **Integration Patterns**:
+          - Real-time synchronization (APIs, webhooks)
+          - Batch processing (scheduled imports/exports)
+          - Event-driven updates (trigger-based sync)
+          - Master data management (single source of truth)
+        elicit: true
+
+      - id: reporting-analytics
+        title: Reporting and Analytics
+        instruction: |
+          Define reporting and analytics requirements:
+          
+          **Standard Reports Needed**:
+          - Financial reports (P&L, Balance Sheet, Cash Flow)
+          - Sales reports (pipeline, performance, forecasts)
+          - Inventory reports (stock levels, movements, valuations)
+          - Purchase reports (spend analysis, vendor performance)
+          - HR reports (headcount, time tracking, performance)
+          
+          **Custom Report Requirements**:
+          For each custom report, specify:
+          1. **Report Name**: Clear, descriptive name
+          2. **Business Purpose**: Why this report is needed
+          3. **Audience**: Who will use this report
+          4. **Frequency**: How often it's generated
+          5. **Data Sources**: What data is included
+          6. **Format**: PDF, Excel, web dashboard, etc.
+          7. **Distribution**: How it's shared (email, portal, etc.)
+          
+          **Analytics Requirements**:
+          - Key Performance Indicators (KPIs) to track
+          - Dashboard requirements for different user roles
+          - Data visualization needs (charts, graphs, maps)
+          - Historical trending and comparative analysis
+          - Drill-down capabilities and interactive features
+          
+          **Compliance Reporting**:
+          - Regulatory reports required
+          - Audit trail requirements
+          - Data retention and archival needs
+        elicit: true
+
+  - id: technical-constraints
+    title: Technical Constraints
+    instruction: |
+      Document technical constraints and requirements that impact the Odoo implementation.
+    sections:
+      - id: infrastructure
+        title: Infrastructure Requirements
+        instruction: |
+          Define infrastructure and deployment requirements:
+          
+          **Deployment Model**:
+          - [ ] On-premise (self-hosted)
+          - [ ] Cloud-hosted (AWS, Google Cloud, Azure)
+          - [ ] Odoo.sh (Odoo's cloud platform)
+          - [ ] Hybrid (mixed deployment)
+          
+          **Performance Requirements**:
+          - Expected user concurrency (simultaneous users)
+          - Response time requirements (page load times)
+          - Database size projections (current and 3-year growth)
+          - Backup and disaster recovery requirements
+          - Uptime/availability requirements (99.9%, 24/7, etc.)
+          
+          **Security Requirements**:
+          - Data encryption requirements (at rest, in transit)
+          - Authentication methods (LDAP, SSO, 2FA)
+          - Network security (firewalls, VPN access)
+          - Compliance requirements (GDPR, SOX, HIPAA, etc.)
+          - Audit logging and monitoring needs
+          
+          **Scalability Requirements**:
+          - Expected growth in users over 3 years
+          - Transaction volume growth projections
+          - Geographic expansion considerations
+          - Multi-company/multi-currency needs
+        elicit: true
+
+      - id: existing-systems
+        title: Existing System Landscape
+        instruction: |
+          Document the current technology landscape and constraints:
+          
+          **Current Systems Inventory**:
+          - ERP/accounting systems currently in use
+          - CRM systems and customer databases
+          - Inventory management systems
+          - HR/payroll systems
+          - Other business applications
+          
+          **Technical Environment**:
+          - Operating systems and versions
+          - Database systems in use
+          - Network infrastructure
+          - Security tools and policies
+          - Backup systems and procedures
+          
+          **Migration Constraints**:
+          - Systems that cannot be changed during implementation
+          - Data that must be preserved
+          - Integrations that must continue working
+          - Compliance requirements during transition
+          - User training and change management constraints
+          
+          **Technical Team Capabilities**:
+          - Current Odoo expertise level
+          - Python/PostgreSQL experience
+          - Systems administration capabilities
+          - Training needs and timeline
+        elicit: true
+
+  - id: project-approach
+    title: Project Approach
+    instruction: |
+      Define the recommended approach for this Odoo implementation.
+    sections:
+      - id: implementation-strategy
+        title: Implementation Strategy
+        instruction: |
+          Recommend an implementation approach based on the requirements:
+          
+          **Implementation Options**:
+          
+          1. **Big Bang Implementation**
+             - All modules implemented simultaneously
+             - Single go-live date
+             - Best for: Smaller organizations, simple processes
+             - Risks: Higher complexity, longer testing phase
+          
+          2. **Phased Implementation**
+             - Modules implemented in logical phases
+             - Multiple go-live dates
+             - Best for: Larger organizations, complex integrations
+             - Benefits: Reduced risk, easier change management
+          
+          3. **Parallel Run**
+             - New system runs alongside old system
+             - Gradual transition with validation
+             - Best for: Mission-critical systems
+             - Considerations: Higher cost, data synchronization
+          
+          **Recommended Approach**: [Select and justify based on requirements]
+          
+          **Phase Planning** (if phased approach):
+          - Phase 1: Core modules (typically Finance + one operational module)
+          - Phase 2: Additional operational modules
+          - Phase 3: Advanced features and integrations
+          - Phase 4: Optimization and enhancement
+        elicit: true
+
+      - id: timeline-milestones
+        title: Timeline and Milestones
+        instruction: |
+          Provide high-level timeline and key milestones:
+          
+          **Project Phases and Duration**:
+          
+          1. **Discovery and Planning** (X weeks)
+             - Requirements validation and finalization
+             - Technical architecture design
+             - Project team formation and training
+          
+          2. **Configuration and Development** (X weeks)
+             - Odoo installation and base configuration
+             - Custom module development
+             - Integration development and testing
+          
+          3. **Testing and Training** (X weeks)
+             - System integration testing
+             - User acceptance testing
+             - End-user training programs
+          
+          4. **Go-Live and Support** (X weeks)
+             - Production deployment
+             - Go-live support
+             - Post-implementation optimization
+          
+          **Key Milestones**:
+          - Requirements sign-off
+          - Technical architecture approval
+          - Development completion
+          - UAT completion
+          - Go-live readiness
+          - Production go-live
+          - Post-implementation review
+          
+          **Dependencies and Risks**:
+          - External system readiness
+          - Data migration complexity
+          - User availability for testing/training
+          - Change management challenges
+        elicit: true
+
+  - id: assumptions-risks
+    title: Assumptions and Risks
+    instruction: |
+      Document key assumptions and risks for the project.
+    sections:
+      - id: assumptions
+        title: Key Assumptions
+        instruction: |
+          List critical assumptions underlying this PRD:
+          
+          **Business Assumptions**:
+          - Business processes can be adapted to Odoo best practices
+          - Users will be available for training and testing
+          - Business stakeholders will provide timely feedback
+          - Current data quality is sufficient for migration
+          
+          **Technical Assumptions**:
+          - Existing infrastructure can support Odoo requirements
+          - Third-party systems have adequate integration capabilities
+          - Required technical expertise is available or can be acquired
+          - No major Odoo version changes during implementation
+          
+          **Project Assumptions**:
+          - Budget and timeline estimates are based on current scope
+          - Project team members will be dedicated as planned
+          - No major organizational changes during implementation
+          - External vendors will meet their commitments
+          
+          **Validation Required**: Mark assumptions that need validation during project planning.
+        elicit: true
+
+      - id: risks
+        title: Risk Assessment
+        instruction: |
+          Identify and assess key project risks:
+          
+          **Risk Categories**:
+          
+          **Technical Risks**:
+          - Integration complexity higher than expected
+          - Performance issues with large data volumes
+          - Custom development more complex than anticipated
+          - Third-party system limitations
+          
+          **Business Risks**:
+          - User resistance to change
+          - Business process changes more disruptive than expected
+          - Key stakeholders unavailable during critical phases
+          - Regulatory or compliance issues
+          
+          **Project Risks**:
+          - Timeline delays due to scope creep
+          - Budget overruns from unforeseen requirements
+          - Key team members leaving project
+          - Vendor or contractor performance issues
+          
+          **Risk Assessment Format**:
+          For each risk, provide:
+          - Risk description
+          - Probability (High/Medium/Low)
+          - Impact (High/Medium/Low)
+          - Mitigation strategy
+          - Contingency plan
+          
+          **Risk Monitoring**: How risks will be tracked and managed throughout the project.
+        elicit: true
+
+  - id: next-steps
+    title: Next Steps
+    instruction: |
+      Outline immediate next steps following PRD approval.
+    sections:
+      - id: immediate-actions
+        title: Immediate Actions
+        instruction: |
+          Define actions required immediately after PRD approval:
+          
+          **Project Setup**:
+          - [ ] Finalize project team structure and roles
+          - [ ] Establish project governance and decision-making process  
+          - [ ] Set up project management tools and communication channels
+          - [ ] Create detailed project schedule with dependencies
+          
+          **Technical Preparation**:
+          - [ ] Set up development and testing environments
+          - [ ] Conduct detailed technical architecture design
+          - [ ] Begin data discovery and cleansing activities
+          - [ ] Initiate integration analysis with external systems
+          
+          **Stakeholder Engagement**:
+          - [ ] Conduct detailed requirements workshops with each department
+          - [ ] Begin change management and communication planning
+          - [ ] Schedule regular stakeholder review meetings
+          - [ ] Plan user training approach and materials
+          
+          **Vendor/Resource Planning**:
+          - [ ] Finalize Odoo implementation partner selection (if applicable)
+          - [ ] Secure required technical resources and expertise
+          - [ ] Establish service level agreements and success criteria
+          - [ ] Plan knowledge transfer and ongoing support model
+        elicit: true
+
+      - id: success-tracking
+        title: Success Tracking
+        instruction: |
+          Define how project success will be measured and tracked:
+          
+          **Success Metrics**:
+          - Implementation timeline adherence
+          - Budget variance from approved estimates
+          - User adoption rates post go-live
+          - Business process improvement measurements
+          - System performance against requirements
+          - Integration success and data accuracy
+          
+          **Measurement Approach**:
+          - Baseline measurements before implementation
+          - Milestone tracking throughout project
+          - Post-implementation success assessment
+          - Ongoing performance monitoring
+          
+          **Review Schedule**:
+          - Weekly project status reviews
+          - Monthly stakeholder progress reports  
+          - Quarterly business impact assessments
+          - Post-implementation review (30, 60, 90 days)
+          
+          **Success Criteria Validation**:
+          How each success criterion from the introduction will be validated and measured.
+        elicit: true

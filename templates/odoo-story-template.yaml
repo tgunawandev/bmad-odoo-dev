@@ -1,0 +1,584 @@
+template:
+  id: odoo-story-template-v1
+  name: Odoo Development Story
+  version: 1.0
+  output:
+    format: markdown
+    filename: "docs/stories/{{story_number}}.{{story_slug}}.md"
+    title: "Story {{story_number}}: {{story_title}}"
+
+workflow:
+  mode: structured
+  validation: story-checklist
+
+sections:
+  - id: story-header
+    title: Story Overview
+    instruction: |
+      Provide a clear, concise overview of this development story within the Odoo context.
+    sections:
+      - id: story-identification
+        title: Story Identification
+        content: |
+          **Story ID**: {{story_number}}
+          **Story Title**: {{story_title}}
+          **Epic**: {{epic_name}}
+          **Priority**: {{priority}}
+          **Estimate**: {{estimate}} story points
+          
+          **Story Type**: 
+          - [ ] New Odoo Module Development
+          - [ ] Existing Module Enhancement
+          - [ ] Integration Development
+          - [ ] Data Migration
+          - [ ] Configuration/Setup
+          - [ ] Bug Fix/Technical Debt
+          
+          **Affected Odoo Modules**:
+          {{#each affected_modules}}
+          - {{this}}
+          {{/each}}
+
+      - id: business-context
+        title: Business Context
+        instruction: |
+          Provide business context from the PRD that justifies this development story.
+          
+          Reference the specific business requirements, user needs, and expected value
+          that this story addresses. Connect the technical work to business outcomes.
+        elicit: true
+
+      - id: technical-context
+        title: Technical Context
+        instruction: |
+          Provide technical context from the Architecture document that guides this implementation.
+          
+          Reference the architectural decisions, design patterns, and technical constraints
+          that apply to this story. Include any dependencies on other stories or systems.
+        elicit: true
+
+  - id: acceptance-criteria
+    title: Acceptance Criteria
+    instruction: |
+      Define clear, testable acceptance criteria using Given-When-Then format where appropriate.
+      Focus on business behavior and user outcomes rather than technical implementation details.
+    sections:
+      - id: functional-criteria
+        title: Functional Acceptance Criteria
+        instruction: |
+          Define functional requirements that must be met for this story to be considered complete.
+          
+          Use the format:
+          **AC #**: [Clear, testable statement]
+          **Given**: [Initial context/preconditions]
+          **When**: [Action performed]
+          **Then**: [Expected outcome]
+          
+          Example for Odoo development:
+          **AC 1**: Sales user can create quotation with custom fields
+          **Given**: A sales user is logged into Odoo
+          **When**: They create a new quotation
+          **Then**: They can fill in custom reference and special instructions fields
+          **And**: The quotation saves successfully with all custom data
+        elicit: true
+
+      - id: technical-criteria
+        title: Technical Acceptance Criteria
+        instruction: |
+          Define technical requirements specific to Odoo development:
+          
+          **Code Quality**:
+          - [ ] Code follows OCA development guidelines
+          - [ ] All Python code passes flake8 and pylint-odoo checks
+          - [ ] Proper docstrings and comments for complex logic
+          - [ ] No security vulnerabilities introduced
+          
+          **Odoo Compliance**:
+          - [ ] Module structure follows Odoo conventions
+          - [ ] Proper inheritance patterns used (no core modifications)
+          - [ ] Security groups and access rights properly configured
+          - [ ] Views follow Odoo UI/UX guidelines
+          
+          **Integration Requirements**:
+          - [ ] Works with existing Odoo modules without conflicts
+          - [ ] Database migrations (if any) are safe and reversible
+          - [ ] Performance impact is acceptable
+          - [ ] Multi-company support (if applicable)
+          
+          **Testing Requirements**:
+          - [ ] Unit tests cover critical business logic
+          - [ ] Integration tests validate module interactions
+          - [ ] Manual testing checklist completed
+          - [ ] No regression in existing functionality
+        elicit: true
+
+      - id: user-experience-criteria
+        title: User Experience Criteria
+        instruction: |
+          Define UX requirements specific to Odoo interface:
+          
+          **Usability Requirements**:
+          - Clear and intuitive user interface
+          - Consistent with Odoo design patterns
+          - Proper form validation and error messages
+          - Responsive design for mobile/tablet (if applicable)
+          
+          **Performance Requirements**:
+          - Page load times under 3 seconds
+          - Search operations complete in under 1 second
+          - No UI freezing during operations
+          - Proper loading indicators for long operations
+          
+          **Accessibility Requirements**:
+          - Keyboard navigation support
+          - Screen reader compatibility
+          - Color contrast meets WCAG guidelines
+          - Proper ARIA labels for custom widgets
+        elicit: true
+
+  - id: technical-implementation
+    title: Technical Implementation Guide
+    instruction: |
+      Provide detailed technical guidance for implementing this story in Odoo.
+    sections:
+      - id: odoo-models
+        title: Odoo Models and Data Structure
+        instruction: |
+          Define the data model changes required for this story:
+          
+          **New Models** (if creating new models):
+          ```python
+          class NewModel(models.Model):
+              _name = 'module.new_model'
+              _description = 'New Model Description'
+              _inherit = ['mail.thread', 'mail.activity.mixin']
+              
+              # Define fields, methods, and constraints
+          ```
+          
+          **Model Extensions** (if extending existing models):
+          ```python
+          class ExistingModelExtension(models.Model):
+              _inherit = 'existing.model'
+              
+              # New fields
+              custom_field = fields.Char('Custom Field')
+              
+              # Method overrides
+              def existing_method(self):
+                  # Custom logic
+                  return super().existing_method()
+          ```
+          
+          **Database Considerations**:
+          - Field types and constraints
+          - Indexes needed for performance
+          - Migration scripts for existing data
+          - Multi-company field requirements
+        elicit: true
+
+      - id: odoo-views
+        title: User Interface Implementation
+        instruction: |
+          Define the view modifications and new interfaces needed:
+          
+          **View Types Required**:
+          - [ ] Form views (create/edit interfaces)
+          - [ ] Tree/List views (record listings)
+          - [ ] Search views (filtering and grouping)
+          - [ ] Kanban views (card-based interfaces)
+          - [ ] Calendar views (date-based records)
+          - [ ] Pivot/Report views (analytics)
+          
+          **View Implementation Guidelines**:
+          ```xml
+          <!-- Example form view structure -->
+          <record id="view_model_form" model="ir.ui.view">
+              <field name="name">model.form</field>
+              <field name="model">your.model</field>
+              <field name="arch" type="xml">
+                  <form string="Model Form">
+                      <header>
+                          <!-- Buttons and statusbar -->
+                      </header>
+                      <sheet>
+                          <!-- Form content -->
+                      </sheet>
+                      <div class="oe_chatter">
+                          <!-- Chatter for mail.thread -->
+                      </div>
+                  </form>
+              </field>
+          </record>
+          ```
+          
+          **UI/UX Considerations**:
+          - Field grouping and layout
+          - Conditional visibility rules
+          - Proper widget selection
+          - Action buttons and workflows
+        elicit: true
+
+      - id: business-logic
+        title: Business Logic Implementation
+        instruction: |
+          Define the business logic and workflows to be implemented:
+          
+          **Workflow States** (if applicable):
+          ```python
+          state = fields.Selection([
+              ('draft', 'Draft'),
+              ('confirmed', 'Confirmed'),
+              ('done', 'Done'),
+              ('cancelled', 'Cancelled')
+          ], default='draft')
+          
+          def action_confirm(self):
+              # Business logic for confirmation
+              self.state = 'confirmed'
+          ```
+          
+          **Validation Rules**:
+          ```python
+          @api.constrains('field_name')
+          def _check_field_name(self):
+              for record in self:
+                  if not record.field_name:
+                      raise ValidationError('Field is required')
+          ```
+          
+          **Computed Fields**:
+          ```python
+          @api.depends('related_field')
+          def _compute_calculated_field(self):
+              for record in self:
+                  record.calculated_field = self._calculate_value()
+          ```
+          
+          **Integration Points**:
+          - API endpoints (if external integration)
+          - Scheduled actions (cron jobs)
+          - Email templates and notifications
+          - Report generation
+        elicit: true
+
+      - id: security-implementation
+        title: Security and Access Control
+        instruction: |
+          Define security implementation for this story:
+          
+          **User Groups** (if new groups needed):
+          ```xml
+          <record model="res.groups" id="group_model_user">
+              <field name="name">Model User</field>
+              <field name="category_id" ref="base.module_category_operations"/>
+          </record>
+          ```
+          
+          **Access Rights** (ir.model.access.csv):
+          ```csv
+          id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+          access_model_user,model.user,model_your_model,group_model_user,1,1,1,0
+          ```
+          
+          **Record Rules** (row-level security):
+          ```xml
+          <record id="model_rule_user" model="ir.rule">
+              <field name="name">Model: User Access</field>
+              <field name="model_id" ref="model_your_model"/>
+              <field name="domain_force">[('user_id', '=', user.id)]</field>
+              <field name="groups" eval="[(4, ref('group_model_user'))]"/>
+          </record>
+          ```
+          
+          **Field-Level Security**:
+          - Sensitive field access restrictions
+          - Department-based visibility
+          - Manager approval requirements
+        elicit: true
+
+  - id: testing-strategy
+    title: Testing Strategy
+    instruction: |
+      Define comprehensive testing approach for this story.
+    sections:
+      - id: unit-tests
+        title: Unit Tests
+        instruction: |
+          Define unit tests for the implemented functionality:
+          
+          **Test Structure**:
+          ```python
+          from odoo.tests import TransactionCase
+          from odoo.exceptions import ValidationError
+          
+          class TestYourModel(TransactionCase):
+              
+              def setUp(self):
+                  super().setUp()
+                  # Test data setup
+              
+              def test_model_creation(self):
+                  # Test basic model creation
+                  pass
+              
+              def test_business_logic(self):
+                  # Test business rules and workflows
+                  pass
+              
+              def test_validation_rules(self):
+                  # Test constraints and validations
+                  pass
+          ```
+          
+          **Test Coverage Requirements**:
+          - All public methods tested
+          - Business logic validation
+          - Constraint and validation testing
+          - Error handling scenarios
+          - Edge cases and boundary conditions
+        elicit: true
+
+      - id: integration-tests
+        title: Integration Tests
+        instruction: |
+          Define integration testing approach:
+          
+          **Module Integration Testing**:
+          - Test interactions with standard Odoo modules
+          - Verify data flow between related models
+          - Test view rendering and form submissions
+          - Validate security rules and access control
+          
+          **External Integration Testing**:
+          - API endpoint testing (if applicable)
+          - Third-party system integration
+          - Email template and notification testing
+          - Report generation and formatting
+          
+          **Performance Testing**:
+          - Large dataset handling
+          - Concurrent user scenarios
+          - Database query optimization
+          - Memory usage validation
+        elicit: true
+
+      - id: manual-testing
+        title: Manual Testing Checklist
+        instruction: |
+          Create manual testing checklist for business users:
+          
+          **Functional Testing**:
+          - [ ] All forms load correctly and display proper fields
+          - [ ] Data entry validation works as expected
+          - [ ] Save/update operations complete successfully
+          - [ ] Search and filtering functions work correctly
+          - [ ] Reports generate with accurate data
+          
+          **Workflow Testing**:
+          - [ ] State transitions work correctly
+          - [ ] Approval workflows function as designed
+          - [ ] Email notifications sent appropriately
+          - [ ] Integration with related modules works
+          
+          **User Experience Testing**:
+          - [ ] Interface is intuitive and easy to use
+          - [ ] Error messages are clear and helpful
+          - [ ] Performance is acceptable for typical usage
+          - [ ] Mobile/tablet interface works (if applicable)
+          
+          **Security Testing**:
+          - [ ] Users can only access permitted data
+          - [ ] Field-level security works correctly
+          - [ ] Record rules enforce proper access control
+          - [ ] No unauthorized data exposure
+        elicit: true
+
+  - id: deployment-considerations
+    title: Deployment Considerations
+    instruction: |
+      Define deployment-specific requirements and considerations.
+    sections:
+      - id: deployment-requirements
+        title: Deployment Requirements
+        instruction: |
+          Specify requirements for deploying this story:
+          
+          **Environment Preparation**:
+          - Odoo version compatibility verified
+          - Required dependencies installed
+          - Database backup completed
+          - Deployment window scheduled
+          
+          **Deployment Steps**:
+          1. **Module Installation**:
+             ```bash
+             # Standard module installation
+             docker compose run --rm odoo odoo -d database -i module_name --stop-after-init
+             ```
+          
+          2. **Data Migration** (if required):
+             ```bash
+             # Run migration scripts
+             docker compose run --rm odoo click-odoo -d database --rollback < migration_script.py
+             ```
+          
+          3. **Configuration Updates**:
+             - System parameter updates
+             - Security group assignments
+             - Email template configuration
+             - Integration endpoint setup
+          
+          **Post-Deployment Validation**:
+          - Smoke tests for critical functionality
+          - Data integrity verification
+          - Performance baseline comparison
+          - User access verification
+        elicit: true
+
+      - id: rollback-plan
+        title: Rollback Plan
+        instruction: |
+          Define rollback procedures in case of deployment issues:
+          
+          **Rollback Triggers**:
+          - Critical functionality not working
+          - Data integrity issues discovered
+          - Performance degradation beyond acceptable limits
+          - Security vulnerabilities introduced
+          
+          **Rollback Procedures**:
+          1. **Immediate Actions**:
+             - Stop affected services
+             - Notify stakeholders
+             - Assess impact and scope
+          
+          2. **Database Rollback**:
+             ```bash
+             # Restore database from backup
+             docker compose down
+             # Restore database backup
+             # Restart services
+             docker compose up -d
+             ```
+          
+          3. **Module Rollback**:
+             ```bash
+             # Uninstall problematic module
+             docker compose run --rm odoo odoo -d database -u module_name --stop-after-init
+             # Or revert to previous module version
+             ```
+          
+          **Rollback Validation**:
+          - Verify system functionality restored
+          - Confirm data integrity maintained
+          - Test critical business processes
+          - Notify users of resolution
+        elicit: true
+
+  - id: documentation
+    title: Documentation Requirements
+    instruction: |
+      Define documentation that must be created or updated for this story.
+    sections:
+      - id: technical-documentation
+        title: Technical Documentation
+        instruction: |
+          Specify technical documentation requirements:
+          
+          **Code Documentation**:
+          - Docstrings for all public methods
+          - Inline comments for complex logic
+          - API documentation (if applicable)
+          - Database schema documentation
+          
+          **Module Documentation**:
+          - README.rst file with module overview
+          - Installation and configuration instructions
+          - Dependencies and compatibility notes
+          - Known issues and limitations
+          
+          **Architecture Documentation Updates**:
+          - Data model changes
+          - Integration points
+          - Security model updates
+          - Performance considerations
+        elicit: true
+
+      - id: user-documentation
+        title: User Documentation
+        instruction: |
+          Specify user-facing documentation requirements:
+          
+          **User Guides**:
+          - Step-by-step procedures for new functionality
+          - Screenshots and visual guides
+          - Common use cases and examples
+          - Troubleshooting and FAQ sections
+          
+          **Training Materials**:
+          - Training presentations or videos
+          - Hands-on exercises and scenarios
+          - Quick reference cards
+          - Change summary for existing users
+          
+          **System Administration**:
+          - Configuration procedures
+          - Maintenance tasks
+          - Monitoring and troubleshooting
+          - Backup and recovery procedures
+        elicit: true
+
+  - id: definition-of-done
+    title: Definition of Done
+    instruction: |
+      Final checklist that must be completed before this story is considered done.
+    sections:
+      - id: completion-checklist
+        title: Completion Checklist
+        content: |
+          **Development Complete**:
+          - [ ] All acceptance criteria met
+          - [ ] Code reviewed and approved
+          - [ ] Unit tests written and passing
+          - [ ] Integration tests completed
+          - [ ] Security review completed
+          - [ ] Performance testing completed
+          
+          **Quality Assurance**:
+          - [ ] Manual testing checklist completed
+          - [ ] User acceptance testing passed
+          - [ ] Regression testing completed
+          - [ ] Code quality checks passed (flake8, pylint-odoo)
+          - [ ] No critical or high-priority bugs
+          
+          **Documentation Complete**:
+          - [ ] Technical documentation updated
+          - [ ] User documentation created/updated
+          - [ ] API documentation updated (if applicable)
+          - [ ] Deployment guide updated
+          
+          **Deployment Ready**:
+          - [ ] Deployed to staging environment
+          - [ ] Stakeholder sign-off received
+          - [ ] Deployment plan reviewed and approved
+          - [ ] Rollback plan tested and validated
+          - [ ] Production deployment completed successfully
+          
+          **Knowledge Transfer**:
+          - [ ] Development team briefed on implementation
+          - [ ] Support team trained on new functionality
+          - [ ] End users trained (if required)
+          - [ ] Documentation distributed to relevant teams
+
+      - id: sign-off
+        title: Story Sign-off
+        content: |
+          **Stakeholder Approvals**:
+          - [ ] Product Owner: _________________ Date: _______
+          - [ ] Technical Lead: ________________ Date: _______
+          - [ ] Quality Assurance: _____________ Date: _______
+          - [ ] Business Stakeholder: __________ Date: _______
+          
+          **Notes**:
+          _Space for any final notes or comments about the story completion._

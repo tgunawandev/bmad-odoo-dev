@@ -1,0 +1,92 @@
+{
+  "name": "bmad-method-odoo",
+  "version": "1.0.0",
+  "description": "BMAD-METHOD expansion pack for comprehensive Odoo ERP development workflows",
+  "main": "index.js",
+  "bin": {
+    "bmad-odoo": "./bin/bmad-odoo.js"
+  },
+  "keywords": [
+    "bmad-method",
+    "odoo",
+    "doodba",
+    "oca",
+    "erp",
+    "addon",
+    "expansion-pack",
+    "agile",
+    "ai",
+    "development",
+    "workflow",
+    "ai-agents"
+  ],
+  "author": "Tri Gunawan <tgunawan@kodemeio.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tgunawandev/BMAD-METHOD-ODOO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tgunawandev/BMAD-METHOD-ODOO/issues"
+  },
+  "homepage": "https://github.com/tgunawandev/BMAD-METHOD-ODOO#readme",
+  "peerDependencies": {
+    "bmad-method": ">=4.30.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^9.4.1",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^8.2.5",
+    "ora": "^5.4.1",
+    "semver": "^7.5.4",
+    "yaml": "^2.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.45.0",
+    "jest": "^29.6.1",
+    "js-yaml": "^4.1.0",
+    "prettier": "^3.5.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "scripts/",
+    "agents/",
+    "tasks/",
+    "templates/",
+    "checklists/",
+    "data/",
+    "teams/",
+    "config.yaml",
+    "index.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "jest",
+    "lint": "eslint .",
+    "prepare": "npm run build",
+    "postinstall": "node scripts/postinstall.js",
+    "validate": "node scripts/validate.js"
+  },
+  "bmadMethod": {
+    "expansionPack": true,
+    "category": "domain-specific",
+    "slashPrefix": "OdooMethod",
+    "framework": "doodba",
+    "community": "oca",
+    "inheritsFrom": "bmad-method",
+    "extendsCore": true,
+    "standalone": false,
+    "supportedVersions": {
+      "odoo": ["13.0", "14.0", "15.0", "16.0", "17.0", "18.0"],
+      "bmad-method": ">=4.30.0"
+    }
+  }
+}
