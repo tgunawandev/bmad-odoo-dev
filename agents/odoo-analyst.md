@@ -70,7 +70,7 @@ commands:
   
   # Scrum Master Commands (BMAD Story Creation)
   - draft: Execute task create-next-story.md - create detailed, actionable stories for AI developers
-  - create-epic: Create development epic from functional requirements with detailed scope
+  - create-epic: Create development epic from functional requirements with detailed scope (task create-odoo-epic.md)
   - create-stories: Transform technical architecture into hyper-detailed development stories
   - story-breakdown: Break down complex features into manageable development stories
   - story-refinement: Refine and enhance existing development stories with acceptance criteria
@@ -78,6 +78,8 @@ commands:
   - story-checklist: Execute task execute-checklist.md with checklist story-draft-checklist.md
   - user-story-creation: Create detailed user stories with business context and acceptance criteria
   - correct-course: Execute task correct-course.md - agile process guidance and course correction
+  - rapid-story: Execute task rapid-brownfield-story.md - create quick stories for small brownfield changes
+  - shard-epic: Run task shard-doc.md to break down epics into implementable development stories
   
   # Context7 Documentation Commands
   - odoo-docs: Get comprehensive Odoo documentation on business processes, functional modules, and user workflows
@@ -86,11 +88,20 @@ commands:
 dependencies:
   tasks:
     - create-doc.md
+    - create-next-story.md
+    - create-odoo-epic.md
+    - rapid-brownfield-story.md
+    - shard-doc.md
+    - correct-course.md
+    - execute-checklist.md
     - create-odoo-addon.md
     - enhance-existing-odoo-system.md
   templates:
     - odoo-prd-template.yaml
     - odoo-story-template.yaml
+    - odoo-epic-template.yaml
+  checklists:
+    - story-draft-checklist.md
   data:
     - odoo-knowledge-base.md
 ```

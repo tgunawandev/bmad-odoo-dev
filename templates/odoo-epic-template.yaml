@@ -1,0 +1,197 @@
+epic_id: "EPIC-ODO-[NUMBER]"
+title: "[Epic Title - High-Level Business Capability]"
+business_theme: "[Business capability being delivered]"
+odoo_version: "[Target Odoo version - e.g., 16.0]"
+priority: "[Critical/High/Medium]"
+estimated_timeline: "[Timeline estimate - e.g., 2-3 sprints]"
+
+vision_statement: |
+  For [target users - e.g., sales managers, warehouse staff],
+  Who need [business problem - e.g., real-time inventory visibility],
+  The [epic name] epic
+  Will deliver [key capabilities - e.g., automated stock tracking]
+  That provide [business value - e.g., 30% reduction in stockouts]
+  Unlike [current state - e.g., manual inventory processes].
+
+business_value:
+  primary_objectives:
+    - "[Primary business objective 1 - e.g., Improve inventory accuracy]"
+    - "[Primary business objective 2 - e.g., Reduce manual data entry]"
+  
+  success_metrics:
+    - metric: "[Metric name - e.g., Inventory Accuracy]"
+      target: "[Target value - e.g., 98%]"
+      measurement: "[How measured - e.g., Monthly inventory variance report]"
+    
+    - metric: "[Metric name - e.g., Process Time]"
+      target: "[Target value - e.g., 50% reduction]"
+      measurement: "[How measured - e.g., Time tracking in workflow]"
+
+  user_benefits:
+    - "[End user benefit 1 - e.g., Faster order processing]"
+    - "[End user benefit 2 - e.g., Reduced data entry errors]"
+
+scope:
+  included:
+    - "[Core functionality 1 - e.g., Real-time stock level updates]"
+    - "[Core functionality 2 - e.g., Automated reorder notifications]"
+    - "[Integration requirement - e.g., Integration with existing sales module]"
+  
+  excluded:
+    - "[Future enhancement 1 - e.g., Advanced forecasting algorithms]"
+    - "[Future enhancement 2 - e.g., Multi-warehouse optimization]"
+    - "[Out of scope item - e.g., Complete ERP replacement]"
+
+stories:
+  - id: "[STORY-ID-1]"
+    title: "[Story 1 Title - e.g., Real-time Stock Level Display]"
+    user_story: "As a [user type], I want [capability], so that [business value]"
+    business_value: "[Specific business value this story delivers]"
+    technical_focus: "[Primary technical area - e.g., Stock model enhancement]"
+    estimated_effort: "[Story points or time estimate]"
+    dependencies: "[Other stories or external dependencies]"
+    acceptance_criteria_summary: "[Brief summary of key acceptance criteria]"
+    
+  - id: "[STORY-ID-2]"
+    title: "[Story 2 Title - e.g., Automated Reorder Notifications]"
+    user_story: "As a [user type], I want [capability], so that [business value]"
+    business_value: "[Specific business value this story delivers]"
+    technical_focus: "[Primary technical area - e.g., Notification system]"
+    estimated_effort: "[Story points or time estimate]"
+    dependencies: "[Dependencies on other stories]"
+    acceptance_criteria_summary: "[Brief summary of key acceptance criteria]"
+
+  - id: "[STORY-ID-3]"
+    title: "[Story 3 Title - if needed]"
+    user_story: "As a [user type], I want [capability], so that [business value]"
+    business_value: "[Specific business value this story delivers]"
+    technical_focus: "[Primary technical area]"
+    estimated_effort: "[Story points or time estimate]"
+    dependencies: "[Dependencies]"
+    acceptance_criteria_summary: "[Brief summary of key acceptance criteria]"
+
+technical_architecture:
+  odoo_modules:
+    new: "[New modules to be created - e.g., custom_inventory_tracking]"
+    extended: "[Existing modules to be extended - e.g., stock, sale]"
+    dependencies: 
+      standard: "[Standard Odoo modules - e.g., stock, sale, purchase]"
+      oca: "[OCA community modules - e.g., stock_available_unreserved]"
+      custom: "[Existing custom modules - e.g., company_specific_inventory]"
+
+  data_models:
+    new: "[New models to be created - e.g., stock.tracking.rule]"
+    extended: "[Existing models to be extended - e.g., stock.quant, product.product]"
+    relationships: "[Key model relationships - e.g., stock.tracking.rule -> product.template]"
+
+  integration_points:
+    internal: "[Internal Odoo integrations - e.g., stock module, sales module]"
+    external: "[External system integrations - e.g., warehouse management system]"
+    apis: "[API requirements - e.g., REST API for mobile app integration]"
+
+  security_model:
+    groups: "[Security groups needed - e.g., inventory_manager, warehouse_user]"
+    access_rules: "[Key access control requirements]"
+    record_rules: "[Multi-company or data isolation requirements]"
+
+delivery_phases:
+  - phase: 1
+    name: "[Phase 1 Name - e.g., Basic Stock Tracking]"
+    stories: "[Story IDs in phase 1 - e.g., STORY-ID-1]"
+    business_value: "[Business value delivered in phase 1]"
+    success_criteria: "[How success is measured for phase 1]"
+    timeline: "[Expected timeline for phase 1]"
+    
+  - phase: 2
+    name: "[Phase 2 Name - e.g., Advanced Notifications]"
+    stories: "[Story IDs in phase 2 - e.g., STORY-ID-2, STORY-ID-3]"
+    business_value: "[Additional business value in phase 2]"
+    success_criteria: "[Success criteria for phase 2]"
+    timeline: "[Expected timeline for phase 2]"
+
+quality_strategy:
+  testing_approach: |
+    [Testing strategy summary - e.g., 
+    - Unit tests for all business logic
+    - Integration tests for stock module interactions
+    - User acceptance testing with warehouse staff
+    - Performance testing for high-volume operations]
+  
+  quality_gates:
+    - "[Quality gate 1 - e.g., All unit tests pass]"
+    - "[Quality gate 2 - e.g., Integration with existing workflows validated]"
+    - "[Quality gate 3 - e.g., Performance benchmarks met]"
+  
+  acceptance_criteria: |
+    [Epic-level acceptance criteria - e.g.,
+    - Stock levels update in real-time across all modules
+    - Notifications trigger correctly based on reorder rules
+    - Existing inventory processes continue to function
+    - Performance impact is negligible (<5% increase in response time)]
+
+risks:
+  - risk: "[Risk description - e.g., Integration complexity with existing customizations]"
+    impact: "[High/Medium/Low]"
+    probability: "[High/Medium/Low]"
+    mitigation: "[Specific mitigation strategy]"
+    owner: "[Who is responsible for managing this risk]"
+    
+  - risk: "[Risk description - e.g., User adoption challenges]"
+    impact: "[High/Medium/Low]"
+    probability: "[High/Medium/Low]"
+    mitigation: "[Specific mitigation strategy]"
+    owner: "[Who is responsible for managing this risk]"
+
+dependencies:
+  internal:
+    - dependency: "[Internal dependency - e.g., Sales module upgrade completion]"
+      type: "Internal"
+      status: "[Status/Timeline - e.g., In progress, due Week 3]"
+      impact: "[Impact if delayed]"
+      
+  external:
+    - dependency: "[External dependency - e.g., API access from warehouse system]"
+      type: "External"
+      status: "[Status/Timeline]"
+      impact: "[Impact if delayed]"
+      owner: "[Who is responsible for resolving]"
+
+stakeholders:
+  business_owner: "[Business owner - e.g., Warehouse Manager]"
+  product_owner: "[Product owner - e.g., Operations Director]"
+  technical_lead: "[Technical lead - e.g., Senior Developer]"
+  key_users:
+    - "[Key user 1 - e.g., Inventory Supervisor]"
+    - "[Key user 2 - e.g., Purchasing Manager]"
+
+communication_plan:
+  reporting_frequency: "[e.g., Weekly progress updates]"
+  stakeholder_reviews: "[e.g., End of each phase demo]"
+  decision_points: "[Key decision points requiring stakeholder input]"
+
+definition_of_done:
+  epic_level:
+    - "[Epic completion criteria 1 - e.g., All stories completed and accepted]"
+    - "[Epic completion criteria 2 - e.g., User acceptance testing passed]"
+    - "[Epic completion criteria 3 - e.g., Performance benchmarks met]"
+    - "[Epic completion criteria 4 - e.g., Documentation updated]"
+    - "[Epic completion criteria 5 - e.g., Training materials created]"
+
+notes:
+  assumptions: |
+    [Key assumptions made during epic planning - e.g.,
+    - Current stock module customizations are documented
+    - Warehouse staff available for UAT during planned timeframe
+    - External API access will be granted by IT security]
+  
+  constraints: |
+    [Key constraints that affect implementation - e.g.,
+    - Must maintain compatibility with existing reports
+    - Cannot modify core Odoo stock functionality
+    - Limited to current server resources]
+  
+  future_considerations: |
+    [Items to consider for future epics - e.g.,
+    - Advanced analytics and reporting
+    - Mobile app integration
+    - Multi-warehouse optimization]

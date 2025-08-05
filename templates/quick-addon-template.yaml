@@ -1,0 +1,277 @@
+addon_metadata:
+  name: "[snake_case_addon_name]"
+  display_name: "[Human Readable Addon Name]"
+  version: "[16.0.1.0.0]"
+  category: "[Category - e.g., Sales, Inventory, Accounting, Operations]"
+  summary: "[Brief one-line description of functionality]"
+  author: "[Your Company], Odoo Community Association (OCA)"
+  website: "https://github.com/OCA/[repository-name]"
+  license: "AGPL-3"
+  
+business_context:
+  purpose: "[One sentence describing what this addon does]"
+  primary_users: "[Who will use this addon - e.g., Sales managers, Warehouse staff]"
+  key_features:
+    - "[Feature 1 - e.g., Track custom product attributes]"
+    - "[Feature 2 - e.g., Generate specialized reports]"
+    - "[Feature 3 - e.g., Automate approval workflows]"
+  integration_points:
+    - "[Integration 1 - e.g., Extends product management]"
+    - "[Integration 2 - e.g., Integrates with sale orders]"
+
+technical_structure:
+  depends:
+    - "base"
+    - "web"
+    - "[additional_dependency - e.g., sale, stock, account]"
+  
+  main_model:
+    name: "[model.name - e.g., custom.tracking]"
+    description: "[Model Description]"
+    inherits: 
+      - "mail.thread"
+      - "mail.activity.mixin"
+    
+  key_fields:
+    basic:
+      - name: "name"
+        type: "Char"
+        description: "Record name"
+        required: true
+        tracking: true
+      
+      - name: "description"
+        type: "Text"
+        description: "Detailed description"
+        
+      - name: "active"
+        type: "Boolean"
+        description: "Active status"
+        default: true
+        tracking: true
+    
+    relationships:
+      - name: "company_id"
+        type: "Many2one"
+        relation: "res.company"
+        description: "Company"
+        required: true
+        default: "lambda self: self.env.company"
+      
+      - name: "user_id"
+        type: "Many2one"
+        relation: "res.users"
+        description: "Responsible user"
+        default: "lambda self: self.env.user"
+        tracking: true
+    
+    workflow:
+      - name: "state"
+        type: "Selection"
+        options:
+          - value: "draft"
+            label: "Draft"
+          - value: "confirmed"
+            label: "Confirmed"
+          - value: "done"
+            label: "Done"
+        default: "draft"
+        tracking: true
+
+  business_methods:
+    - name: "action_confirm"
+      description: "Confirm the record"
+      logic: "Change state from draft to confirmed"
+    
+    - name: "action_done"
+      description: "Mark as done"
+      logic: "Change state to done"
+
+  constraints:
+    - name: "_check_name"
+      field: "name"
+      validation: "Name cannot be empty"
+      
+views_structure:
+  form_view:
+    sections:
+      - name: "header"
+        components:
+          - "action buttons"
+          - "statusbar"
+      
+      - name: "sheet"
+        components:
+          - "title (name field)"
+          - "basic info group"
+          - "notebook with description"
+      
+      - name: "chatter"
+        components:
+          - "followers"
+          - "activities"
+          - "messages"
+  
+  tree_view:
+    columns:
+      - "name"
+      - "user_id"
+      - "state"
+      - "company_id (multi-company groups)"
+  
+  search_view:
+    filters:
+      - name: "my_records"
+        domain: "[('user_id', '=', uid)]"
+      
+      - name: "draft"
+        domain: "[('state', '=', 'draft')]"
+    
+    group_by:
+      - "state"
+      - "user_id"
+
+menu_structure:
+  root_menu:
+    id: "menu_[addon_name]_root"
+    name: "[Addon Display Name]"
+    sequence: 100
+  
+  sub_menus:
+    - id: "menu_[model_name]"
+      name: "[Model Display Names]"
+      action: "action_[model_name]"
+      sequence: 10
+
+security_configuration:
+  access_rules:
+    - id: "access_[model_name]_user"
+      model: "[model.name]"
+      group: "base.group_user"
+      permissions:
+        read: true
+        write: true
+        create: true
+        unlink: true
+    
+    - id: "access_[model_name]_manager"
+      model: "[model.name]"
+      group: "base.group_system"
+      permissions:
+        read: true
+        write: true
+        create: true
+        unlink: true
+
+data_configuration:
+  initial_data:
+    description: "[Description of initial configuration data needed]"
+    records: "[List any required initial records]"
+  
+  demo_data:
+    - record_id: "demo_[model_name]_1"
+      name: "Demo [Model Name] 1"
+      description: "First demo record"
+    
+    - record_id: "demo_[model_name]_2"
+      name: "Demo [Model Name] 2"
+      description: "Second demo record"
+
+testing_strategy:
+  manual_tests:
+    - test: "Create new record"
+      steps:
+        - "Navigate to addon menu"
+        - "Click Create"
+        - "Fill required fields"
+        - "Save record"
+      expected: "Record created successfully"
+    
+    - test: "Workflow transitions"
+      steps:
+        - "Create draft record"
+        - "Click Confirm button"
+        - "Verify state change"
+      expected: "State changes to confirmed"
+  
+  validation_checks:
+    - "Addon installs without errors"
+    - "Menu items appear correctly"
+    - "CRUD operations work"
+    - "Business logic functions"
+    - "Security access works"
+
+documentation:
+  readme_sections:
+    - "Brief description"
+    - "Key features list"
+    - "Usage instructions"
+    - "Configuration notes"
+  
+  help_content:
+    description: "[User-friendly description for help text]"
+    usage_tips:
+      - "[Tip 1 - e.g., Use descriptive names for better organization]"
+      - "[Tip 2 - e.g., Confirm records to lock them for processing]"
+
+file_structure:
+  required_files:
+    - "__init__.py (root)"
+    - "__manifest__.py"
+    - "models/__init__.py"
+    - "models/[model_name].py"
+    - "views/[model_name]_views.xml"
+    - "views/menu_items.xml"
+    - "security/ir.model.access.csv"
+    - "data/initial_data.xml"
+    - "demo/demo_data.xml"
+    - "README.rst"
+    - "static/description/index.html"
+  
+  optional_files:
+    - "wizards/ (if wizards needed)"
+    - "reports/ (if custom reports needed)"
+    - "static/src/js/ (if JS needed)"
+    - "tests/ (for automated tests)"
+
+deployment_checklist:
+  pre_installation:
+    - "Validate addon structure"
+    - "Check Python syntax"
+    - "Validate XML files"
+    - "Verify manifest syntax"
+  
+  installation:
+    - "Install in test database"
+    - "Verify no installation errors"
+    - "Check menu navigation"
+    - "Test basic CRUD operations"
+  
+  post_installation:
+    - "Validate business logic"
+    - "Test workflow transitions"
+    - "Verify security access"
+    - "Check demo data loads"
+
+customization_notes:
+  extension_points:
+    - "[Extension point 1 - e.g., Override _compute_total method]"
+    - "[Extension point 2 - e.g., Add custom fields to form view]"
+  
+  integration_tips:
+    - "[Integration tip 1 - e.g., Use depends=['sale'] for sales integration]"
+    - "[Integration tip 2 - e.g., Follow existing field naming conventions]"
+  
+  performance_considerations:
+    - "[Performance tip 1 - e.g., Add database indexes for search fields]"
+    - "[Performance tip 2 - e.g., Use computed fields sparingly]"
+
+future_enhancements:
+  planned_features:
+    - "[Future feature 1 - e.g., Advanced reporting dashboard]"
+    - "[Future feature 2 - e.g., Mobile app integration]"
+    - "[Future feature 3 - e.g., External API integration]"
+  
+  scalability_considerations:
+    - "[Scalability consideration 1 - e.g., Optimize for large datasets]"
+    - "[Scalability consideration 2 - e.g., Add caching for computed fields]"

@@ -61,6 +61,8 @@ commands:
   - implement-feature: Implement Odoo feature from technical specification and user stories
   - create-module: Create new Odoo module from requirements (task create-odoo-addon.md)
   - enhance-existing: Enhance existing Odoo functionality (task enhance-existing-odoo-system.md)
+  - quick-addon: Rapid addon creation with OCA compliance for fast development cycle
+  - brownfield-enhance: Quick enhancement of existing Odoo systems with minimal disruption
   
   # Specialized Odoo Commands
   - debug-issue: Debug and troubleshoot Odoo issues systematically
@@ -71,6 +73,13 @@ commands:
   - migrate-data: Execute data migration and system upgrade procedures
   - troubleshoot-deployment: Diagnose and resolve deployment and infrastructure issues
   
+  # Doodba Integration Commands
+  - doodba-deploy: Execute rapid Doodba deployment for testing and development
+  - doodba-test: Run comprehensive testing in Doodba environment
+  - invoke-install: Quick module installation using invoke commands
+  - invoke-test: Execute module testing using Doodba invoke workflow
+  - container-debug: Debug issues in Doodba containerized environment
+  
   # Context7 Documentation Commands
   - odoo-docs: Get comprehensive Odoo documentation on specific topics, modules, or development patterns
   - odoo-api: Get detailed API reference for specific Odoo modules, methods, or ORM operations
@@ -80,8 +89,13 @@ dependencies:
     - create-odoo-addon.md
     - enhance-existing-odoo-system.md
     - plan-odoo-migration.md
+    - doodba-quick-deploy.md
+    - quick-addon-creation.md
   templates:
     - odoo-story-template.yaml
+    - quick-addon-template.yaml
+  checklists:
+    - story-dod-checklist.md
   data:
     - odoo-knowledge-base.md
 ```
